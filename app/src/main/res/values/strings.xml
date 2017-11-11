@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">With_family</string>
+    <string name="navigation_home">home</string>
+    <string name="navigation_album">album</string>
+    <string name="navigation_calendar">calendar</string>
+    <string name="navigation_chat">chat</string>
+    <string name="navigation_control">control</string>
+
+</resources>
