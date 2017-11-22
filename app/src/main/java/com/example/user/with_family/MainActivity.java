@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.example.user.with_family.ui.f_album.Album_Fragment;
 import com.example.user.with_family.ui.f_calendar.Calendar_Fragment;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         init();
         BottomNavigationView navigation = (BottomNavigationView)findViewById(R.id.bottom_navigation);
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     public void init(){
         selectNavigationView(HomeFragment.newInstance());
         onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
