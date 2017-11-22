@@ -137,13 +137,13 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
                 WriteListSetVisible(0);
                 break;
             case R.id.write_add_btn:
-                /*Intent intent = new Intent(getContext(), Calender_dialog.class);
-                intent.putExtra("title",Year + "." + Month + "." + Day + " " + getDayOfWeek(DAY_OF_WEEK));
+                Intent intent = new Intent(getContext(), Calendar_dialog.class);
+                intent.putExtra("title", Year + "." + Month + "." + Day + " " + getDayOfWeek(DAY_OF_WEEK));
                 intent.putExtra("DB_NAME", String.valueOf(Year) + String.valueOf(Month) + String.valueOf(Day));
 
                 getContext().startActivity(intent);
                 WriteListSetVisible(0);
-*/                break;
+                break;
         }
     }
     private void setIntentFilter() {

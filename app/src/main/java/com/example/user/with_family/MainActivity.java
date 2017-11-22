@@ -1,15 +1,20 @@
 package com.example.user.with_family;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.example.user.with_family.ui.f_album.Album_Fragment;
 import com.example.user.with_family.ui.f_calendar.Calendar_Fragment;
@@ -20,6 +25,8 @@ import com.example.user.with_family.ui.f_home.HomeFragment;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private final long FINISH_INTERVAL_TIME = 2000;
+    private long backPressedTime = 0;
     private Album_Fragment albumFragment;
     private Calendar_Fragment calendarFragment;
     private Chat_Fragment chatFragment;
@@ -27,18 +34,44 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        initStatusbar();
         init();
         initView();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
     }
+    @Override
+    public void onBackPressed() {
 
+
+        long tempTime = System.currentTimeMillis();
+        long intervalTime = tempTime - backPressedTime;
+        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
+            super.onBackPressed();
+        } else {
+            backPressedTime = tempTime;
+            Toast.makeText(getApplicationContext(), "종료하시려면 한번더 눌러주세요", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void initStatusbar() {
+        View view = getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getWindow().setStatusBarColor(Color.parseColor("#ffc0cb"));
+            }
+        } else getWindow().setStatusBarColor(Color.parseColor("#000"));
+    }
     public void init() {
         onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
