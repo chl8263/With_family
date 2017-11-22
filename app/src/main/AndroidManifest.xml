@@ -18,7 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.f_calendar.Calendar_dialog"/>
+        <activity android:name=".ui.f_calendar.Calendar_dialog"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            />
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.user.with_family.Interfaces.CalendarListener;
 import com.example.user.with_family.R;
 import com.example.user.with_family.db.DBManager;
 import com.example.user.with_family.util.Contact;
@@ -61,6 +63,9 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
     private DBManager dbManager;
     private SQLiteDatabase redadb;
     private Cursor cursor;
+
+
+
     public Calendar_Fragment(){
 
     }
@@ -140,7 +145,9 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
                 Intent intent = new Intent(getContext(), Calendar_dialog.class);
                 intent.putExtra("title", Year + "." + Month + "." + Day + " " + getDayOfWeek(DAY_OF_WEEK));
                 intent.putExtra("DB_NAME", String.valueOf(Year) + String.valueOf(Month) + String.valueOf(Day));
-
+                Bundle bundle = new Bundle();
+                bundle.put("callback", calendarListener);
+                intent.putExtras(bundle);
                 getContext().startActivity(intent);
                 WriteListSetVisible(0);
                 break;
@@ -192,7 +199,12 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
         }
         return "";
     }
-
+    CalendarListener calendarListener =new CalendarListener() {
+        @Override
+        public void refresh() {
+        Log.e("aaa","sdsd");
+        }
+    };
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

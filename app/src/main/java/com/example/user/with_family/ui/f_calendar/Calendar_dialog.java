@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.user.with_family.Interfaces.CalendarListener;
 import com.example.user.with_family.R;
 import com.example.user.with_family.db.DBManager;
 import com.example.user.with_family.util.Contact;
@@ -31,6 +32,7 @@ public class Calendar_dialog extends AppCompatActivity implements View.OnClickLi
     private String DB_NAME;
     private DBManager dbManager;
     private Cursor cursor;
+    private CalendarListener calendarListener;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,10 @@ public class Calendar_dialog extends AppCompatActivity implements View.OnClickLi
         Intent intent = getIntent();
         getTitle = intent.getStringExtra("title");
         DB_NAME = intent.getStringExtra("DB_NAME");
+        Bundle bundle = intent.getExtras();
+        if(bundle !=null){
+            calendarListener = bundle.getParcelable("callback");
+        }
         title.setText(getTitle);
 
         dbManager = new DBManager(getApplicationContext(),"Write",null,1);
@@ -81,6 +87,7 @@ public class Calendar_dialog extends AppCompatActivity implements View.OnClickLi
                 }catch (SQLiteException e){
                     e.printStackTrace();
                 }
+                calendarListener.refresh();
                 sendBroadcast(new Intent(Contact.SAVE_DB));
                 finish();
                 break;
