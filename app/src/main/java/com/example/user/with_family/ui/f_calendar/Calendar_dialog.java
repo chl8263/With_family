@@ -82,13 +82,16 @@ public class Calendar_dialog extends AppCompatActivity implements View.OnClickLi
                     db.execSQL("CREATE TABLE if not exists '" + DB_NAME + "' (content TEXT);");
                     ContentValues values =new ContentValues();
                     values.put("content",content.getText().toString());
+                    //db.execSQL("delete from "+DB_NAME);
+                    db.delete("'"+DB_NAME+"'",null,null);
                     db.insert("'"+DB_NAME+"'",null,values);
                     db.close();
                 }catch (SQLiteException e){
                     e.printStackTrace();
                 }
-                calendarListener.refresh();
+                //setResult(Activity.RESULT_OK);
                 sendBroadcast(new Intent(Contact.SAVE_DB));
+
                 finish();
                 break;
         }

@@ -1,6 +1,7 @@
 package com.example.user.with_family.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -41,6 +42,15 @@ public class DBManager extends SQLiteOpenHelper {
         db.execSQL(_query);
         db.close();
     }
-
+    public String all_table_name(){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM sqlite_master",null);
+        String a ="";
+        while (cursor.moveToNext()){
+            a+=cursor.getString(0);
+            a+=" ";
+        }
+        return a;
+    }
 
 }

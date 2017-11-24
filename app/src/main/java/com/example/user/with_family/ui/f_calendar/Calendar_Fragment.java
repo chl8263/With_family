@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -23,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.with_family.Interfaces.CalendarListener;
 import com.example.user.with_family.R;
@@ -145,14 +145,23 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
                 Intent intent = new Intent(getContext(), Calendar_dialog.class);
                 intent.putExtra("title", Year + "." + Month + "." + Day + " " + getDayOfWeek(DAY_OF_WEEK));
                 intent.putExtra("DB_NAME", String.valueOf(Year) + String.valueOf(Month) + String.valueOf(Day));
-                Bundle bundle = new Bundle();
-                bundle.put("callback", calendarListener);
-                intent.putExtras(bundle);
-                getContext().startActivity(intent);
+                getActivity().startActivityForResult(intent,1);
                 WriteListSetVisible(0);
                 break;
         }
     }
+
+  /*  @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode== Activity.RESULT_OK){
+
+            monthlyPagerAdapter.notifyDataSetChanged();
+            Log.e("All_table",dbManager.all_table_name());
+            Toast.makeText(getContext(),"sad",Toast.LENGTH_SHORT).show();
+        }
+    }
+*/
     private void setIntentFilter() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Contact.viewpager_left);
@@ -225,6 +234,9 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
                 asyncTask.execute();
             } else if (intent.getAction().equals(Contact.SAVE_DB)) {
                 monthlyPagerAdapter.notifyDataSetChanged();
+                Log.e("All_table",dbManager.all_table_name());
+                Toast.makeText(getContext(),"sad",Toast.LENGTH_SHORT).show();
+
             } else if (intent.getAction().equals(Contact.WRITE_LIST_GONE)) {
                 WriteListSetVisible(0);
             }
@@ -256,6 +268,9 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
 
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToPosition(i);
+                    if(cursor.getString(0)!=null){
+
+                    }
                     Log.e("MOVE_TO_NEXT",cursor.getString(0));
                     a = cursor.getString(0).toString();
                     starttime.add(cursor.getString(0));
