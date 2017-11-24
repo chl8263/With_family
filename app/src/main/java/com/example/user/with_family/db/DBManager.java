@@ -44,11 +44,14 @@ public class DBManager extends SQLiteOpenHelper {
     }
     public String all_table_name(){
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM sqlite_master",null);
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master",null);
         String a ="";
+        cursor.moveToNext();
+        cursor.moveToNext();
+        cursor.moveToNext();
         while (cursor.moveToNext()){
             a+=cursor.getString(0);
-            a+=" ";
+            a+=",";
         }
         return a;
     }

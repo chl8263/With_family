@@ -10,21 +10,29 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.with_family.ui.drawlayout.DrawAdapter;
+import com.example.user.with_family.ui.drawlayout.DrawItem;
 import com.example.user.with_family.ui.f_album.Album_Fragment;
 import com.example.user.with_family.ui.f_calendar.Calendar_Fragment;
 import com.example.user.with_family.ui.f_chat.Chat_Fragment;
 import com.example.user.with_family.ui.f_control.ControlFragment;
 import com.example.user.with_family.ui.f_home.HomeFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
     private Album_Fragment albumFragment;
@@ -32,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
     private Chat_Fragment chatFragment;
     private ControlFragment controlFragment;
     private HomeFragment homeFragment;
+    private DrawerLayout drawerLayout;
+    private TextView opendrawlayout;
+    private TextView set_Dday;
+    private ArrayList<DrawItem> drawItems;
+    private RecyclerView drawlayout_recyclerview;
+    private DrawAdapter drawAdapter;
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -42,26 +56,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initStatusbar();
         init();
+        setDrawerLayout();
         initView();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
     }
+
     @Override
     public void onBackPressed() {
-
-
         long tempTime = System.currentTimeMillis();
         long intervalTime = tempTime - backPressedTime;
-        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
-            super.onBackPressed();
+        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+            Log.e("asdsd","asdsds");
+            drawerLayout.closeDrawer(Gravity.RIGHT);
         } else {
-            backPressedTime = tempTime;
-            Toast.makeText(getApplicationContext(), "종료하시려면 한번더 눌러주세요", Toast.LENGTH_SHORT).show();
+            if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
+                super.onBackPressed();
+            } else {
+                backPressedTime = tempTime;
+                Toast.makeText(getApplicationContext(), "종료하시려면 한번더 눌러주세요", Toast.LENGTH_SHORT).show();
+            }
         }
 
 
     }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initStatusbar() {
         View view = getWindow().getDecorView();
@@ -72,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
             }
         } else getWindow().setStatusBarColor(Color.parseColor("#000"));
     }
+
     public void init() {
+
         onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -106,6 +128,18 @@ public class MainActivity extends AppCompatActivity {
         controlFragment = ControlFragment.newInstance();
         homeFragment = HomeFragment.newInstance();
         initNavView();
+    }
+
+    private void setDrawerLayout() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawlayout);
+        opendrawlayout = (TextView) findViewById(R.id.open_draw);
+        opendrawlayout.setOnClickListener(this);
+        set_Dday = (TextView) findViewById(R.id.dday);
+        drawlayout_recyclerview = (RecyclerView) findViewById(R.id.drawlayout_recyclerview);
+        drawItems = new ArrayList<DrawItem>();
+        drawAdapter = new DrawAdapter(getApplicationContext(), drawItems);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
     }
 
     private void initNavView() {
@@ -145,5 +179,14 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentTransaction.replace(R.id.fragment, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.open_draw:
+                drawerLayout.openDrawer(drawlayout_recyclerview);
+                break;
+        }
     }
 }
