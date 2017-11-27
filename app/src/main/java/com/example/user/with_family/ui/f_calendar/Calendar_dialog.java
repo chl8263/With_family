@@ -55,7 +55,7 @@ public class Calendar_dialog extends AppCompatActivity implements View.OnClickLi
         }
         title.setText(getTitle);
 
-        dbManager = new DBManager(getApplicationContext(),"Write",null,1);
+
 
         dbManager = new DBManager(getApplicationContext(), "Write", null, 1);
         SQLiteDatabase redadb = dbManager.getReadableDatabase();

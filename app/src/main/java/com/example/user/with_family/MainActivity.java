@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,6 +22,8 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.with_family.Interfaces.DdayListener;
+import com.example.user.with_family.db.DBManager;
 import com.example.user.with_family.ui.drawlayout.DrawAdapter;
 import com.example.user.with_family.ui.drawlayout.DrawItem;
 import com.example.user.with_family.ui.f_album.Album_Fragment;
@@ -32,7 +35,7 @@ import com.example.user.with_family.ui.f_home.HomeFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener ,DdayListener{
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
     private Album_Fragment albumFragment;
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<DrawItem> drawItems;
     private RecyclerView drawlayout_recyclerview;
     private DrawAdapter drawAdapter;
+    private DBManager dbManager;
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -132,13 +136,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setDrawerLayout() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawlayout);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         opendrawlayout = (TextView) findViewById(R.id.open_draw);
         opendrawlayout.setOnClickListener(this);
         set_Dday = (TextView) findViewById(R.id.dday);
         drawlayout_recyclerview = (RecyclerView) findViewById(R.id.drawlayout_recyclerview);
+        drawlayout_recyclerview.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         drawItems = new ArrayList<DrawItem>();
+        drawItems.add(new DrawItem("aaaaaaa"));
         drawAdapter = new DrawAdapter(getApplicationContext(), drawItems);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawlayout_recyclerview.setAdapter(drawAdapter);
+
+        dbManager = new DBManager(getApplicationContext(), "Write", null, 1);
+
+
 
     }
 
@@ -188,5 +199,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 drawerLayout.openDrawer(drawlayout_recyclerview);
                 break;
         }
+    }
+
+    @Override
+    public void DdayFresh() {
+
+        String a  =  dbManager.all_table_name();
+        String[] splites = a.split(",");
+        for(int i=0;i<splites.length;i++){
+            Log.e("qqqqqqqqqqqqqqq",splites[i]);
+            drawItems.add(new DrawItem("asdsdsd"));
+            drawItems.add(new DrawItem(dbManager.getDday(splites[i])));
+            drawItems.add(new DrawItem(dbManager.getDday(splites[i])));
+        }
+        drawAdapter.notifyDataSetChanged();
+
+
     }
 }

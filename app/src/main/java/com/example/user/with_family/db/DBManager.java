@@ -55,5 +55,15 @@ public class DBManager extends SQLiteOpenHelper {
         }
         return a;
     }
+    public String getDday(String day){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT content FROM '"+day+"'",null);
+        String a="";
+        while (cursor.moveToNext()){
+            a+=cursor.getString(0);
+
+        }
+        return a;
+    }
 
 }

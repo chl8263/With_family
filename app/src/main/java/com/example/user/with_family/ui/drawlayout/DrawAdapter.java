@@ -43,7 +43,7 @@ public class DrawAdapter extends RecyclerView.Adapter<DrawAdapter.Viewholder> {
         public TextView textView;
         public Viewholder(View itemView) {
             super(itemView);
-            textView = (TextView)itemView.findViewById(R.id.ddaycontent);
+            textView = (TextView)itemView.findViewById(R.id.dday_content);
         }
 
     }

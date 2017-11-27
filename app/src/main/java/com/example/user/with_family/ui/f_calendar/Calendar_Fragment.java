@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.with_family.Interfaces.CalendarListener;
+import com.example.user.with_family.Interfaces.DdayListener;
 import com.example.user.with_family.R;
 import com.example.user.with_family.db.DBManager;
 import com.example.user.with_family.util.Contact;
@@ -64,7 +65,7 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
     private SQLiteDatabase redadb;
     private Cursor cursor;
 
-
+    private DdayListener ddayListener;
 
     public Calendar_Fragment(){
 
@@ -90,6 +91,9 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar,container,false);
         setIntentFilter();
+
+        if(getActivity() instanceof DdayListener)
+            ddayListener = (DdayListener)getActivity();
 
         currentposition = Contact.VIEWPAGER_CURRENT;
         monthly_viewpager = (ViewPager) view.findViewById(R.id.monthly_viewpager);
@@ -235,6 +239,8 @@ public class Calendar_Fragment   extends Fragment implements ViewPager.OnPageCha
             } else if (intent.getAction().equals(Contact.SAVE_DB)) {
                 monthlyPagerAdapter.notifyDataSetChanged();
                 Log.e("All_table",dbManager.all_table_name());
+                if(ddayListener!=null)
+                    ddayListener.DdayFresh();
                 Toast.makeText(getContext(),"sad",Toast.LENGTH_SHORT).show();
 
             } else if (intent.getAction().equals(Contact.WRITE_LIST_GONE)) {
