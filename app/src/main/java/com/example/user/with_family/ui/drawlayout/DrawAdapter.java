@@ -25,7 +25,6 @@ public class DrawAdapter extends RecyclerView.Adapter<DrawAdapter.Viewholder> {
     @Override
     public Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.drawitem,parent,false);
-
         return new Viewholder(view);
     }
 
@@ -36,7 +35,7 @@ public class DrawAdapter extends RecyclerView.Adapter<DrawAdapter.Viewholder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return items.size();
     }
 
     public class Viewholder extends RecyclerView.ViewHolder{

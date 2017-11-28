@@ -11,6 +11,9 @@
         android:layout_width="match_parent"
         />
     <TextView
+        android:gravity="center"
+        android:textSize="24sp"
+        android:text="adasdsd"
         android:textColor="@color/color_Black"
         android:id="@+id/dday_content"
         android:background="@color/color_White"
