@@ -210,17 +210,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < splites.length; i++) {
             Log.e("qqqqqqqqqqqqqqq", splites[i]);
             String tran = String.valueOf(splites[i]);
-            String aa = String.valueOf(tran.charAt(0))+String.valueOf(tran.charAt(1))+String.valueOf(tran.charAt(2))+String.valueOf(tran.charAt(3));
-            String bb = String.valueOf(String.valueOf(tran.charAt(4))+String.valueOf(tran.charAt(5)));
-            String cc = String.valueOf(String.valueOf(tran.charAt(6))+String.valueOf(tran.charAt(7)));
-            int aaa = Integer.parseInt(aa);
-            int bbb = Integer.parseInt(bb);
-            int ccc = Integer.parseInt(cc);
-            caldate(aaa,bbb,ccc);
-            Log.e("year", String.valueOf(aa));
-            Log.e("year", String.valueOf(bb));
-            Log.e("year", String.valueOf(cc));
-            drawItems.add(new DrawItem(dbManager.getDday(splites[i]),String.valueOf(caldate(aaa,bbb,ccc))));
+            if(tran.length()==8) {
+                String aa = String.valueOf(tran.charAt(0)) + String.valueOf(tran.charAt(1)) + String.valueOf(tran.charAt(2)) + String.valueOf(tran.charAt(3));
+                String bb = String.valueOf(String.valueOf(tran.charAt(4)) + String.valueOf(tran.charAt(5)));
+                String cc = String.valueOf(String.valueOf(tran.charAt(6)) + String.valueOf(tran.charAt(7)));
+                int aaa = Integer.parseInt(aa);
+                int bbb = Integer.parseInt(bb);
+                int ccc = Integer.parseInt(cc);
+                caldate(aaa, bbb, ccc);
+                Log.e("year", String.valueOf(aa));
+                Log.e("year", String.valueOf(bb));
+                Log.e("year", String.valueOf(cc));
+                drawItems.add(new DrawItem(dbManager.getDday(splites[i]), String.valueOf(caldate(aaa, bbb, ccc))));
+            }else if(tran.length()==7){
+                String aa = String.valueOf(tran.charAt(0)) + String.valueOf(tran.charAt(1)) + String.valueOf(tran.charAt(2)) + String.valueOf(tran.charAt(3));
+                String bb = String.valueOf(String.valueOf(tran.charAt(4)));
+                String cc = String.valueOf(String.valueOf(tran.charAt(5)) + String.valueOf(tran.charAt(6)));
+                int aaa = Integer.parseInt(aa);
+                int bbb = Integer.parseInt(bb);
+                int ccc = Integer.parseInt(cc);
+                caldate(aaa, bbb, ccc);
+                Log.e("year", String.valueOf(aa));
+                Log.e("year", String.valueOf(bb));
+                Log.e("year", String.valueOf(cc));
+                drawItems.add(new DrawItem(dbManager.getDday(splites[i]), String.valueOf(caldate(aaa, bbb, ccc))));
+            }else if(tran.length()==6){
+                String aa = String.valueOf(tran.charAt(0)) + String.valueOf(tran.charAt(1)) + String.valueOf(tran.charAt(2)) + String.valueOf(tran.charAt(3));
+                String bb = String.valueOf(String.valueOf(tran.charAt(4)));
+                String cc = String.valueOf(String.valueOf(tran.charAt(5)));
+                int aaa = Integer.parseInt(aa);
+                int bbb = Integer.parseInt(bb);
+                int ccc = Integer.parseInt(cc);
+                caldate(aaa, bbb, ccc);
+                Log.e("year", String.valueOf(aa));
+                Log.e("year", String.valueOf(bb));
+                Log.e("year", String.valueOf(cc));
+                drawItems.add(new DrawItem(dbManager.getDday(splites[i]), String.valueOf(caldate(aaa, bbb, ccc))));
+            }
         }
         calDay();
         drawAdapter.notifyDataSetChanged();
