@@ -6,9 +6,18 @@ package com.example.user.with_family.ui.drawlayout;
 
 public class DrawItem {
     private String content;
-
-    public DrawItem(String content) {
+    private String dday;
+    public DrawItem(String content , String dday) {
         this.content = content;
+        this.dday = dday;
+    }
+
+    public String getDday() {
+        return dday;
+    }
+
+    public void setDday(String dday) {
+        this.dday = dday;
     }
 
     public String getContent() {

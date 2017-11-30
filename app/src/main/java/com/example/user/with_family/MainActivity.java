@@ -32,10 +32,13 @@ import com.example.user.with_family.ui.f_chat.Chat_Fragment;
 import com.example.user.with_family.ui.f_control.ControlFragment;
 import com.example.user.with_family.ui.f_home.HomeFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener ,DdayListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, DdayListener {
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
     private Album_Fragment albumFragment;
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         long tempTime = System.currentTimeMillis();
         long intervalTime = tempTime - backPressedTime;
         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-            Log.e("asdsd","asdsds");
+            Log.e("asdsd", "asdsds");
             drawerLayout.closeDrawer(Gravity.RIGHT);
         } else {
             if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
@@ -141,14 +144,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         opendrawlayout.setOnClickListener(this);
         set_Dday = (TextView) findViewById(R.id.dday);
         drawlayout_recyclerview = (RecyclerView) findViewById(R.id.drawlayout_recyclerview);
-        drawlayout_recyclerview.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        drawlayout_recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         drawItems = new ArrayList<DrawItem>();
-        drawItems.add(new DrawItem("aaaaaaa"));
         drawAdapter = new DrawAdapter(getApplicationContext(), drawItems);
         drawlayout_recyclerview.setAdapter(drawAdapter);
 
         dbManager = new DBManager(getApplicationContext(), "Write", null, 1);
-
 
 
     }
@@ -203,17 +204,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void DdayFresh() {
-
-        String a  =  dbManager.all_table_name();
+        String a = dbManager.all_table_name();
         String[] splites = a.split(",");
-        for(int i=0;i<splites.length;i++){
-            Log.e("qqqqqqqqqqqqqqq",splites[i]);
-            drawItems.add(new DrawItem("asdsdsd"));
-            drawItems.add(new DrawItem(dbManager.getDday(splites[i])));
-
+        drawItems.clear();
+        for (int i = 0; i < splites.length; i++) {
+            Log.e("qqqqqqqqqqqqqqq", splites[i]);
+            String tran = String.valueOf(splites[i]);
+            String aa = String.valueOf(tran.charAt(0))+String.valueOf(tran.charAt(1))+String.valueOf(tran.charAt(2))+String.valueOf(tran.charAt(3));
+            String bb = String.valueOf(String.valueOf(tran.charAt(4))+String.valueOf(tran.charAt(5)));
+            String cc = String.valueOf(String.valueOf(tran.charAt(6))+String.valueOf(tran.charAt(7)));
+            int aaa = Integer.parseInt(aa);
+            int bbb = Integer.parseInt(bb);
+            int ccc = Integer.parseInt(cc);
+            caldate(aaa,bbb,ccc);
+            Log.e("year", String.valueOf(aa));
+            Log.e("year", String.valueOf(bb));
+            Log.e("year", String.valueOf(cc));
+            drawItems.add(new DrawItem(dbManager.getDday(splites[i]),String.valueOf(caldate(aaa,bbb,ccc))));
         }
+        calDay();
         drawAdapter.notifyDataSetChanged();
+    }
 
+    private void calDay() {
+        long now = System.currentTimeMillis(); // Data 객체에 시간을 저장한다.
+        Date date = new Date(now);
+        SimpleDateFormat sdfNow = new SimpleDateFormat("yyyyMMdd");
+        String strNow = sdfNow.format(date);
+        Log.e("asd",strNow);
+    }
+    private int caldate(int year,int month,int day){
+        try {
+            Calendar today = Calendar.getInstance(); //현재 오늘 날짜
+            Calendar dday = Calendar.getInstance();
+
+
+            dday.set(year,month-1,day);// D-day의 날짜를 입력합니다.
+
+
+            long mday = dday.getTimeInMillis()/86400000;
+            // 각각 날의 시간 값을 얻어온 다음
+            //( 1일의 값(86400000 = 24시간 * 60분 * 60초 * 1000(1초값) ) )
+
+
+            long tday = today.getTimeInMillis()/86400000;
+            long count = tday - mday; // 오늘 날짜에서 dday 날짜를 빼주게 됩니다.
+            return (int) count+1; // 날짜는 하루 + 시켜줘야합니다.
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return -1;
+        }
 
     }
 }

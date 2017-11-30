@@ -31,6 +31,7 @@ public class DrawAdapter extends RecyclerView.Adapter<DrawAdapter.Viewholder> {
     @Override
     public void onBindViewHolder(Viewholder holder, int position) {
         holder.textView.setText(items.get(position).getContent());
+        holder.dday_time.setText("D"+items.get(position).getDday());
     }
 
     @Override
@@ -40,9 +41,11 @@ public class DrawAdapter extends RecyclerView.Adapter<DrawAdapter.Viewholder> {
 
     public class Viewholder extends RecyclerView.ViewHolder{
         public TextView textView;
+        public TextView dday_time;
         public Viewholder(View itemView) {
             super(itemView);
             textView = (TextView)itemView.findViewById(R.id.dday_content);
+            dday_time = (TextView)itemView.findViewById(R.id.dday_time);
         }
 
     }
