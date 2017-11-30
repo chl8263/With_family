@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("qqqqqqqqqqqqqqq",splites[i]);
             drawItems.add(new DrawItem("asdsdsd"));
             drawItems.add(new DrawItem(dbManager.getDday(splites[i])));
-            drawItems.add(new DrawItem(dbManager.getDday(splites[i])));
+
         }
         drawAdapter.notifyDataSetChanged();
 
