@@ -103,16 +103,18 @@ public class HomeFragment extends Fragment {
             }
             else if(data.getStringExtra("Result").equals("create_room")){
                 String room = data.getStringExtra("room_name").toString();
+                System.out.println("값 되돌려받음 : " + room);
                 dao.setRoom_name(room);
                 room_addUser(dao, room);
             }
-            else
+            else {
                 friend_id += data.getStringExtra("Result");
 
-            // 친구추가 값(전체 회원목록)에서 해당되는 친구가 있으면 추가
-            for(int j=0; j<userDAOList.size(); j++){
-                if(userDAOList.get(j).getId().equals(friend_id)){
-                    room_addUser(userDAOList.get(j), user_room_name);
+                // 친구추가 값(전체 회원목록)에서 해당되는 친구가 있으면 추가
+                for (int j = 0; j < userDAOList.size(); j++) {
+                    if (userDAOList.get(j).getId().equals(friend_id)) {
+                        room_addUser(userDAOList.get(j), dao.getRoom_name());
+                    }
                 }
             }
 
@@ -201,12 +203,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 CurrentListRemove(room_userDAOList);
+                room_userDAOList.add(dao.getId());
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String user = snapshot.getKey().toString();
                     System.out.println("무슨 값이니" + user);
-                    room_userDAOList.add(user);
-                    write();
+                    if(!user.equals(dao.getId())){
+                        room_userDAOList.add(user);
+                    }
                 }
+                write();
             }
 
             @Override
