@@ -15,6 +15,7 @@ public class UserDAO {
     private String friend3;
     private String friend4;
     private String userimg;
+    private String room_name;
 
 
 
@@ -22,7 +23,7 @@ public class UserDAO {
 
     }
 
-    public UserDAO(String id, String pw, String bir, String name, String nick, String friend1, String friend2, String friend3, String friend4, String userimg){
+    public UserDAO(String id, String pw, String bir, String name, String nick, String friend1, String friend2, String friend3, String friend4, String userimg, String room_name){
         this.id = id;
         this.pw = pw;
         this.bir = bir;
@@ -33,6 +34,15 @@ public class UserDAO {
         this.friend3 = friend3;
         this.friend4 = friend4;
         this.userimg = userimg;
+        this.room_name = room_name;
+    }
+
+    public String getRoom_name() {
+        return room_name;
+    }
+
+    public void setRoom_name(String room_name) {
+        this.room_name = room_name;
     }
     public String getUserimg() {
         return userimg;

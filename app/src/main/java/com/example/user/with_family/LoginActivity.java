@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     // sharedpreference에 전화번호 저장
+<<<<<<< HEAD
                     if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
@@ -103,6 +104,10 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     sharededitor.putString("myid", telephonyManager.getLine1Number());
                     sharededitor.commit();
+=======
+                   sharededitor.putString("myid", telephonyManager.getLine1Number());
+                    //sharededitor.commit();
+>>>>>>> origin/master
 
                     id_edittext.setText(telephonyManager.getLine1Number());
                     Toast.makeText(getApplicationContext(), telephonyManager.getLine1Number(), Toast.LENGTH_LONG).show();
@@ -141,6 +146,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "로그인 ON!!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.putString("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.commit();
                         startActivity(intent);
                         break;
                     }

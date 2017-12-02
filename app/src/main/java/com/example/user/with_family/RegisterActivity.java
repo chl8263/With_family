@@ -66,6 +66,8 @@ public class RegisterActivity extends Activity {
                 dataValues.put("friend2", "null");
                 dataValues.put("friend3", "null");
                 dataValues.put("friend4", "null");
+                dataValues.put("userimg", "null");
+                dataValues.put("room_name", "null");
 
 
                 DatabaseReference dr = data_allRef.child("user").child(id_editText.getHint().toString());

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.user.with_family.R;
@@ -42,124 +44,147 @@ public class HomeFragment extends Fragment {
     private static final int request_code = 0;
     SharedPreferences sharedPreferences;            // 저장된 현재 접속자 정보
     FirebaseDatabase databaseRef;
-    DatabaseReference userinfoRef;                  // 접속 유저 정보 가져오는 레퍼런스
+    DatabaseReference roominfoRef;                  // 접속 유저 정보 가져오는 레퍼런스
     DatabaseReference userinfoRef2;                  // 접속 유저가 친구 추가할때 쓰는 레퍼런스
 
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mStorageReference;
 
-
+    private RelativeLayout home_relativelayout;
+    private FrameLayout home_framelayout;
+    private Button room_create_btn;
     private FloatingActionButton floatingActionButton;
-    private RecyclerView user_recyclerView;
+    private RecyclerView user_recyclerView ;
     private String login_user;
+    private String user_room_name;
     Main_JoinStateAdapter main_joinstateAdapter;
     UserDAO dao;
-    UserDAO friendDao;
+    private static List<String> room_userDAOList = new ArrayList<>();     // 방에 들어가있는 유저 목록
     private static List<UserDAO> userDAOList = new ArrayList<>();      // 유저 정보들 저장해놓을 리스트
 
-    public HomeFragment() {
+
+    public HomeFragment(){
+
         databaseRef = FirebaseDatabase.getInstance();
-        userinfoRef = databaseRef.getReference().child("register").child("user");
-        userinfoRef2 = databaseRef.getReference().child("register").child("user");
+        roominfoRef = databaseRef.getReference().child("register").child("r_room");         // 해당 방에 있는 사용자들을 가져오는 레퍼런스
+        userinfoRef2 = databaseRef.getReference().child("register").child("user");          // 모든 사용자들을 가져오는 레퍼런스
         mFirebaseStorage = FirebaseStorage.getInstance();
         //mStorageReference = mFirebaseStorage.getReferenceFromUrl("gs://ahntanwithfamily.appspot.com/a/a.png");
 
-
-        mhandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                Bundle bundle = msg.getData();
-                int position = bundle.getInt("position");
-                updateDao(dao, position, "null");
-            }
-        };
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        user_recyclerView = (RecyclerView) view.findViewById(R.id.main_joinstate_recycleview);
+        View view = inflater.inflate(R.layout.fragment_home,container,false);
+        user_recyclerView = (RecyclerView)view.findViewById(R.id.main_joinstate_recycleview);
+        home_relativelayout = (RelativeLayout)view.findViewById(R.id.home_relativeLayout);
+        home_framelayout = (FrameLayout)view.findViewById(R.id.home_frameLayout);
         return view;
     }
 
+        // 친구 추가버튼에서 넘어온 값
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            String friend_id = "+8210";
 
-    // 친구 추가버튼에서 넘어온 값
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        String friend_id = "+8210";
-
-        if (data.getStringExtra("Result").equals("delete")) {
-            Toast.makeText(getContext(), "삭제 : " + data.getStringExtra("Result"), Toast.LENGTH_LONG).show();
-        } else
-            friend_id += data.getStringExtra("Result");
-
-
-        System.out.println("으앙 친구 : " + friend_id);
-        System.out.println("으앙 친구2 : " + userDAOList.size());
-        System.out.println("으앙 친구2 : " + userDAOList.get(0).getId());
-        System.out.println("으앙 친구2 : " + userDAOList.get(1).getId());
-        System.out.println("으앙 친구2 : " + userDAOList.get(2).getId());
-        //Toast.makeText(getContext(), "으앙 : "+ friend_id, Toast.LENGTH_LONG).show();
-
-
-        for (int i = 0; i < userDAOList.size(); i++) {
-            // 친구 추가 버튼과 일치하는 값이 있다면 추가
-            if (userDAOList.get(i).getId().equals(friend_id)) {
-
-                Map<String, Object> dataValues = new HashMap<>();
-
-                if (dao.getFriend1().equals("null")) {
-                    DatabaseReference dr = userinfoRef2.child(dao.getId());
-                    updateDao(dao, 1, userDAOList.get(i).getId());
-                } else if (dao.getFriend2().equals("null")) {
-                    DatabaseReference dr = userinfoRef2.child(dao.getId());
-                    updateDao(dao, 2, userDAOList.get(i).getId());
-                } else if (dao.getFriend3().equals("null")) {
-                    DatabaseReference dr = userinfoRef2.child(dao.getId());
-                    updateDao(dao, 3, userDAOList.get(i).getId());
-                } else if (dao.getFriend4().equals("null")) {
-                    DatabaseReference dr = userinfoRef2.child(dao.getId());
-                    updateDao(dao, 4, userDAOList.get(i).getId());
-                }
-                //onLoadData(friend_id);
-                break;
+            if(data.getStringExtra("Result").equals("delete")){
+                Toast.makeText(getContext(), "삭제 : "+ data.getStringExtra("Result"), Toast.LENGTH_LONG).show();
             }
-        }
+            else if(data.getStringExtra("Result").equals("create_room")){
+                String room = data.getStringExtra("room_name").toString();
+                dao.setRoom_name(room);
+                room_addUser(dao, room);
+            }
+            else
+                friend_id += data.getStringExtra("Result");
+
+            // 친구추가 값(전체 회원목록)에서 해당되는 친구가 있으면 추가
+            for(int j=0; j<userDAOList.size(); j++){
+                if(userDAOList.get(j).getId().equals(friend_id)){
+                    room_addUser(userDAOList.get(j), user_room_name);
+                }
+            }
+
+
 
     }
 
     // 최종적으로 액티비티에 붙여주는곳
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         user_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         //user_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         main_joinstateAdapter = new Main_JoinStateAdapter(getView().getContext());
         user_recyclerView.setAdapter(main_joinstateAdapter);
 
+        // 방생성 버튼
+        room_create_btn = (Button)getView().findViewById(R.id.room_create_btn);
+        room_create_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), CreateRoomActivity.class);
+                startActivityForResult(intent, request_code);
+            }
+        });
+
         sharedPreferences = this.getActivity().getSharedPreferences("user_id", Context.MODE_PRIVATE);
         login_user = sharedPreferences.getString("myid", "01012345678");
+        user_room_name = sharedPreferences.getString("room_name", "room!!");
 
-
-        userinfoRef.addValueEventListener(new ValueEventListener() {
+        // 접속자 정보만 따온거
+        userinfoRef2.child(login_user).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                dao = dataSnapshot.getValue(UserDAO.class);
+                mStorageReference = mFirebaseStorage.getReferenceFromUrl(dao.getUserimg());
+
+                // 사용자가 속한 방이없다면, 있다면 원래대로 데이터를 불러와 띄움
+                if(dao.getRoom_name().equals("null")){
+                    System.out.println("뷰 첫번쨰 들어옴");
+                    home_relativelayout.setVisibility(View.VISIBLE);
+                    home_framelayout.setVisibility(View.INVISIBLE);
+                }
+                //방을 생성하면 돌아감
+                else if(!dao.getRoom_name().equals("null")){
+                    System.out.println("뷰 두번쨰 들어옴");
+                    home_relativelayout.setVisibility(View.INVISIBLE);
+                    home_framelayout.setVisibility(View.VISIBLE);
+                    dataRun();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+    }
+
+    public void dataRun(){
+        // 모든사용자 저장하는곳
+        userinfoRef2.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                CurrentListRemove(userDAOList);
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     UserDAO dao2 = snapshot.getValue(UserDAO.class);
                     userDAOList.add(dao2);
                 }
@@ -170,29 +195,29 @@ public class HomeFragment extends Fragment {
 
             }
         });
-        // 파이어베이스 로그인 유저데이터(나와 친구들)를 가져와서 저장하는 부분
-        //userinfoRef.child(login_user).child("friend1").addValueEventListener(new ValueEventListener() {
-        userinfoRef.child(login_user).addValueEventListener(new ValueEventListener() {
 
+        // 방에 있는 사람들 목록 저장하는곳
+        roominfoRef.child(dao.getRoom_name()).child("user_tree").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dao = dataSnapshot.getValue(UserDAO.class);
-                //mStorageReference = mFirebaseStorage.getReferenceFromUrl(dao.getUserimg());
-                mStorageReference = mFirebaseStorage.getReferenceFromUrl(dao.getUserimg());
-                //mStorageReference = mFirebaseStorage.getReferenceFromUrl("gs://ahntanwithfamily.appspot.com/821041199582/1");
-
-                System.out.println("이미지URL : " + dao.getUserimg());
-                write();
+                CurrentListRemove(room_userDAOList);
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String user = snapshot.getKey().toString();
+                    System.out.println("무슨 값이니" + user);
+                    room_userDAOList.add(user);
+                    write();
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
         });
 
-        floatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.room_add_fab);
+
+
+        floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.room_add_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             // 방 추가하는 버튼
             @Override
@@ -205,150 +230,72 @@ public class HomeFragment extends Fragment {
         });
     }
 
-
-    public void write() {
-        System.out.println("이미지URL22 : " + dao.getUserimg());
+    public void write(){
         removed();
-        for (int i = 0; i <= 4; i++) {
-            switch (i) {
-                // 0은 나를 추가하는 부분
-                case 0:
-                    main_joinstateAdapter.addItem(new Contacts(mStorageReference.toString(), R.drawable.day_background, dao.getName(), dao.getNick(), dao.getId())); // 이미지 url, 이름 name
-                    break;
-                // 1부터는 친구추가 되있는 부분을
-                case 1:
-                    if (!dao.getFriend1().equals("null")) {
-                        userinfoRef.child(dao.getFriend1().toString()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                friendDao = dataSnapshot.getValue(UserDAO.class);
-                                //main_joinstateAdapter.addItem(new Contacts(R.drawable.user_img, R.drawable.day_background, friendDao.getName(), friendDao.getNick(), friendDao.getId()));
-                                main_joinstateAdapter.addItem(new Contacts(friendDao.getUserimg(), R.drawable.day_background, friendDao.getName(), friendDao.getNick(), friendDao.getId()));
+        for(int i=0; i<room_userDAOList.size(); i++){
+            if(i==0){
+                main_joinstateAdapter.addItem(new Contacts(mStorageReference.toString(), R.drawable.day_background, dao.getName(), dao.getNick(), dao.getId())); // 이미지 url, 이름 name
+            }
+            else {
+                System.out.println("사이즈 1 : " + room_userDAOList.size());
+                System.out.println("사이즈 2 : " + userDAOList.size());
 
-                                //write2(friendDao);
-                            }
+                for(int j=0; j<userDAOList.size(); j++){
+                    System.out.println("룸 리스트 : " + room_userDAOList.get(i).toString());
+                    System.out.println("all 리스트 : " + userDAOList.get(j).getId().toString());
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
+                    if(room_userDAOList.get(i).toString().equals(userDAOList.get(j).getId().toString())){
+                        main_joinstateAdapter.addItem(new Contacts(userDAOList.get(j).getUserimg(), R.drawable.day_background, userDAOList.get(j).getName(), userDAOList.get(j).getNick(), userDAOList.get(j).getId())); // 이미지 url, 이름 name
                     }
-                    break;
-                case 2:
-                    if (!dao.getFriend2().equals("null")) {
-                        userinfoRef.child(dao.getFriend2().toString()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                friendDao = dataSnapshot.getValue(UserDAO.class);
-                                //main_joinstateAdapter.addItem(new Contacts(R.drawable.user_img, R.drawable.day_background, friendDao.getName(), friendDao.getNick(), friendDao.getId()));
-                                main_joinstateAdapter.addItem(new Contacts(friendDao.getUserimg(), R.drawable.day_background, friendDao.getName(), friendDao.getNick(), friendDao.getId()));
-
-                                //write2(friendDao);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                    break;
-                case 3:
-                    if (!dao.getFriend3().equals("null")) {
-                        userinfoRef.child(dao.getFriend3().toString()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                friendDao = dataSnapshot.getValue(UserDAO.class);
-                                //main_joinstateAdapter.addItem(new Contacts(R.drawable.user_img, R.drawable.day_background, friendDao.getName(), friendDao.getNick(), friendDao.getId()));
-                                main_joinstateAdapter.addItem(new Contacts(friendDao.getUserimg(), R.drawable.day_background, friendDao.getName(), friendDao.getNick(), friendDao.getId()));
-                                //write2(friendDao);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                    break;
-                case 4:
-                    if (!dao.getFriend4().equals("null")) {
-                        userinfoRef.child(dao.getFriend4().toString()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                friendDao = dataSnapshot.getValue(UserDAO.class);
-                                //main_joinstateAdapter.addItem(new Contacts(R.drawable.user_img, R.drawable.day_background, friendDao.getName(), friendDao.getNick(), friendDao.getId()));
-                                main_joinstateAdapter.addItem(new Contacts(friendDao.getUserimg(), R.drawable.day_background, friendDao.getName(), friendDao.getNick(), friendDao.getId()));
-
-                                //write2(friendDao);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                    break;
-                default:
-                    break;
+                }
             }
         }
-
-
     }
 
-
-    public void updateDao(UserDAO currentDAO, int num, String addfriend) {
+    public void room_addUser(UserDAO userDAO, String room_name){
+        //room에 해당되는 데이터베이스에 저장하는 부분
         Map<String, Object> dataValues = new HashMap<>();
 
-        dataValues.put("id", currentDAO.getId());
-        dataValues.put("pw", currentDAO.getPw());
-        dataValues.put("name", currentDAO.getName());
-        dataValues.put("bir", currentDAO.getBir());
-        dataValues.put("nick", currentDAO.getNick());
-        dataValues.put("userimg", currentDAO.getUserimg());
-        switch (num) {
-            case 1:
-                dataValues.put("friend1", addfriend);
-                dataValues.put("friend2", currentDAO.getFriend2());
-                dataValues.put("friend3", currentDAO.getFriend3());
-                dataValues.put("friend4", currentDAO.getFriend4());
-                break;
-            case 2:
-                dataValues.put("friend1", currentDAO.getFriend1());
-                dataValues.put("friend2", addfriend);
-                dataValues.put("friend3", currentDAO.getFriend3());
-                dataValues.put("friend4", currentDAO.getFriend4());
-                break;
-            case 3:
-                dataValues.put("friend1", currentDAO.getFriend1());
-                dataValues.put("friend2", currentDAO.getFriend2());
-                dataValues.put("friend3", addfriend);
-                dataValues.put("friend4", currentDAO.getFriend4());
-                break;
-            case 4:
-                dataValues.put("friend1", currentDAO.getFriend1());
-                dataValues.put("friend2", currentDAO.getFriend2());
-                dataValues.put("friend3", currentDAO.getFriend3());
-                dataValues.put("friend4", addfriend);
-                break;
-            default:
-                dataValues.put("friend1", currentDAO.getFriend1());
-                dataValues.put("friend2", currentDAO.getFriend2());
-                dataValues.put("friend3", currentDAO.getFriend3());
-                dataValues.put("friend4", currentDAO.getFriend4());
-                break;
-        }
+        dataValues.put("id", userDAO.getId());
+        dataValues.put("pw", userDAO.getPw());
+        dataValues.put("name", userDAO.getName());
+        dataValues.put("bir", userDAO.getBir());
+        dataValues.put("nick", userDAO.getNick());
+        dataValues.put("userimg", userDAO.getUserimg());
 
-        //Ref2는 없어도 됨
-        DatabaseReference dr = userinfoRef2.child(dao.getId());
+        DatabaseReference dr = roominfoRef.child(room_name).child("user_tree").child(userDAO.getId());
         dr.setValue(dataValues);
+
+        // 본래 회원정보에 room을 추가해주는 부분
+        Map<String, Object> dataValues2 = new HashMap<>();
+
+        dataValues2.put("id", userDAO.getId());
+        dataValues2.put("pw", userDAO.getPw());
+        dataValues2.put("name", userDAO.getName());
+        dataValues2.put("bir", userDAO.getBir());
+        dataValues2.put("nick", userDAO.getNick());
+        dataValues2.put("userimg", userDAO.getUserimg());
+        dataValues2.put("friend1", "null");
+        dataValues2.put("friend2", "null");
+        dataValues2.put("friend3", "null");
+        dataValues2.put("friend4", "null");
+        dataValues2.put("room_name", room_name);
+
+        DatabaseReference dr2 = userinfoRef2.child(userDAO.getId());
+        dr2.setValue(dataValues2);
+
+
     }
 
-    public void removed() {
+    public void removed(){
         main_joinstateAdapter.removeItem();
+    }
+
+    public void CurrentListRemove(List arrayList){
+        int size = arrayList.size();
+        for(int i=0; i<size; i++) {
+            arrayList.remove(0);
+        }
     }
 
 }
