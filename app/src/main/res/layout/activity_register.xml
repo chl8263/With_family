@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#eeeeee"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <!-- 타이틀바 -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="회원가입란"
+            android:textSize="22sp"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:background="#ff7a00"
+            android:layout_width="match_parent"
+            android:layout_height="53dp" />
+    </LinearLayout>
+    <!-- //end 타이틀바 -->
+
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="330dp"
+       android:id="@+id/register_form">
+
+       <LinearLayout
+           android:layout_marginTop="30dp"
+           android:id="@+id/register_ID_layout"
+           android:orientation="horizontal"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:gravity="center">
+
+           <TextView
+               android:layout_width="60dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:text="I   D  :  "
+               android:textColor="#000000"
+               android:textSize="18dp"
+               />
+           <EditText
+               android:id="@+id/register_ID_edit"
+               android:layout_width="160dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:hint="IDddddd"
+               android:textSize="18dp"
+               android:clickable="false"
+               android:focusable="false"/>
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_marginTop="5dp"
+           android:id="@+id/register_PW_layout"
+           android:orientation="horizontal"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:gravity="center">
+
+           <TextView
+               android:layout_width="60dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:text="P W  :  "
+               android:textColor="#000000"
+               android:textSize="18dp"
+               />
+           <EditText
+               android:id="@+id/register_PW_edit"
+               android:layout_width="160dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:textSize="18dp"
+               />
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_marginTop="5dp"
+           android:id="@+id/register_name_layout"
+           android:orientation="horizontal"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:gravity="center">
+
+           <TextView
+               android:layout_width="60dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:text="이 름  :  "
+               android:textColor="#000000"
+               android:textSize="18dp"
+               />
+           <EditText
+               android:id="@+id/register_name_edit"
+               android:layout_width="160dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:textSize="18dp"
+               />
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_marginTop="5dp"
+           android:id="@+id/register_adr_layout"
+           android:orientation="horizontal"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:gravity="center">
+
+           <TextView
+               android:layout_width="60dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:text="생 일  :  "
+               android:textColor="#000000"
+               android:textSize="18dp"
+               />
+           <EditText
+               android:id="@+id/register_bir_edit"
+               android:layout_width="160dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:textSize="18dp"
+               />
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_marginTop="5dp"
+           android:id="@+id/register_nickname_layout"
+           android:orientation="horizontal"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:gravity="center">
+
+           <TextView
+               android:layout_width="60dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:text="별 칭  :  "
+               android:textColor="#000000"
+               android:textSize="18dp"
+               />
+           <EditText
+               android:id="@+id/register_nickname_edit"
+               android:layout_width="160dp"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:textSize="18dp"
+               />
+
+       </LinearLayout>
+
+
+   </LinearLayout>
+
+
+    <!-- 줄 -->
+    <View
+        android:background="#66bdbdbd"
+        android:layout_width="match_parent"
+        android:layout_height="3dp" />
+
+    <!-- 닫기 버튼 -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/register_ok"
+            android:text="확인"
+            android:textSize="15sp"
+            android:textColor="#ff7a00"
+            android:padding="16dp"
+            android:gravity="center"
+            android:background="#00000000"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/register_return"
+            android:text="초기화"
+            android:textSize="15sp"
+            android:textColor="#ff7a00"
+            android:padding="16dp"
+            android:gravity="center"
+            android:background="#00000000"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+    <!--// 닫기 버튼 -->
+</LinearLayout>

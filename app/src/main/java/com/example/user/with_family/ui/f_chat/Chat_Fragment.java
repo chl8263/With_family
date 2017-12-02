@@ -35,4 +35,13 @@ public class Chat_Fragment   extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat,container,false);
         return view;
     }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+
+
+
+    }
 }

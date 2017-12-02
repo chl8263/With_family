@@ -1,6 +1,7 @@
 package com.example.user.with_family;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView drawlayout_recyclerview;
     private DrawAdapter drawAdapter;
     private DBManager dbManager;
+    public SharedPreferences sharedPreferences;
+    SharedPreferences.Editor sharededitor;
+
+    public  String login_user;
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -61,12 +66,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        sharedPreferences = getSharedPreferences("user_id", MODE_PRIVATE);
+        login_user = sharedPreferences.getString("myid", "01012345678");
+        System.out.println("유저 : " + login_user );
+        sharededitor = sharedPreferences.edit();
+        sharededitor.putString("myid", login_user);
+        sharededitor.commit();
+
         initStatusbar();
         init();
         setDrawerLayout();
         initView();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+
 
     }
 
