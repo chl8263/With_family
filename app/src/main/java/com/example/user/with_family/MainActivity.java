@@ -1,6 +1,7 @@
 package com.example.user.with_family;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences.Editor sharededitor;
 
     public  String login_user;
+    public  String user_room_name;
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -67,11 +69,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+        Intent intent = getIntent();
+        user_room_name = intent.getStringExtra("room_name");
+
         sharedPreferences = getSharedPreferences("user_id", MODE_PRIVATE);
         login_user = sharedPreferences.getString("myid", "01012345678");
+        user_room_name = sharedPreferences.getString("room_name", "room_name3");
         System.out.println("유저 : " + login_user );
         sharededitor = sharedPreferences.edit();
         sharededitor.putString("myid", login_user);
+        sharededitor.putString("room_name", user_room_name);
         sharededitor.commit();
 
         initStatusbar();
@@ -80,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
-
 
     }
 

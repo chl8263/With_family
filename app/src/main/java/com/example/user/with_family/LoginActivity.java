@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     // sharedpreference에 전화번호 저장
                    sharededitor.putString("myid", telephonyManager.getLine1Number());
-                    sharededitor.commit();
+                    //sharededitor.commit();
 
                     id_edittext.setText(telephonyManager.getLine1Number());
                     Toast.makeText(getApplicationContext(), telephonyManager.getLine1Number(), Toast.LENGTH_LONG).show();
@@ -122,6 +122,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "로그인 ON!!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.putString("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.commit();
                         startActivity(intent);
                         break;
                     }

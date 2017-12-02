@@ -34,8 +34,12 @@
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".ui.f_home.UserInfoActivity" />
         <activity android:name=".ui.f_home.UserInfoActivity2" />
-        <activity android:name=".ui.f_home.AddFriendActivity"
+        <activity
+            android:name=".ui.f_home.AddFriendActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".ui.f_home.CreateRoomActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
     </application>
 
 </manifest>
