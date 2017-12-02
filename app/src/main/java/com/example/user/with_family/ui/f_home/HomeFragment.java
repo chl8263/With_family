@@ -50,14 +50,14 @@ public class HomeFragment extends Fragment {
 
 
     private FloatingActionButton floatingActionButton;
-    private RecyclerView user_recyclerView ;
+    private RecyclerView user_recyclerView;
     private String login_user;
     Main_JoinStateAdapter main_joinstateAdapter;
     UserDAO dao;
     UserDAO friendDao;
     private static List<UserDAO> userDAOList = new ArrayList<>();      // 유저 정보들 저장해놓을 리스트
 
-    public HomeFragment(){
+    public HomeFragment() {
         databaseRef = FirebaseDatabase.getInstance();
         userinfoRef = databaseRef.getReference().child("register").child("user");
         userinfoRef2 = databaseRef.getReference().child("register").child("user");
@@ -65,10 +65,9 @@ public class HomeFragment extends Fragment {
         //mStorageReference = mFirebaseStorage.getReferenceFromUrl("gs://ahntanwithfamily.appspot.com/a/a.png");
 
 
-
-        mhandler = new Handler(){
+        mhandler = new Handler() {
             @Override
-            public void handleMessage(Message msg){
+            public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 Bundle bundle = msg.getData();
                 int position = bundle.getInt("position");
@@ -76,78 +75,77 @@ public class HomeFragment extends Fragment {
             }
         };
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home,container,false);
-        user_recyclerView = (RecyclerView)view.findViewById(R.id.main_joinstate_recycleview);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        user_recyclerView = (RecyclerView) view.findViewById(R.id.main_joinstate_recycleview);
         return view;
     }
 
 
-        // 친구 추가버튼에서 넘어온 값
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            String friend_id = "+8210";
+    // 친구 추가버튼에서 넘어온 값
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String friend_id = "+8210";
 
-            if(data.getStringExtra("Result").equals("delete")){
-                Toast.makeText(getContext(), "삭제 : "+ data.getStringExtra("Result"), Toast.LENGTH_LONG).show();
-            }
-            else
-                friend_id += data.getStringExtra("Result");
-
-
-            System.out.println("으앙 친구 : " + friend_id);
-            System.out.println("으앙 친구2 : " + userDAOList.size());
-            System.out.println("으앙 친구2 : " + userDAOList.get(0).getId());
-            System.out.println("으앙 친구2 : " + userDAOList.get(1).getId());
-            System.out.println("으앙 친구2 : " + userDAOList.get(2).getId());
-            //Toast.makeText(getContext(), "으앙 : "+ friend_id, Toast.LENGTH_LONG).show();
+        if (data.getStringExtra("Result").equals("delete")) {
+            Toast.makeText(getContext(), "삭제 : " + data.getStringExtra("Result"), Toast.LENGTH_LONG).show();
+        } else
+            friend_id += data.getStringExtra("Result");
 
 
-            for(int i=0; i<userDAOList.size(); i++){
-                // 친구 추가 버튼과 일치하는 값이 있다면 추가
-                if(userDAOList.get(i).getId().equals(friend_id)){
+        System.out.println("으앙 친구 : " + friend_id);
+        System.out.println("으앙 친구2 : " + userDAOList.size());
+        System.out.println("으앙 친구2 : " + userDAOList.get(0).getId());
+        System.out.println("으앙 친구2 : " + userDAOList.get(1).getId());
+        System.out.println("으앙 친구2 : " + userDAOList.get(2).getId());
+        //Toast.makeText(getContext(), "으앙 : "+ friend_id, Toast.LENGTH_LONG).show();
 
-                    Map<String, Object> dataValues = new HashMap<>();
 
-                    if(dao.getFriend1().equals("null")){
-                        DatabaseReference dr = userinfoRef2.child(dao.getId());
-                        updateDao(dao, 1, userDAOList.get(i).getId());
-                    }
-                    else if(dao.getFriend2().equals("null")){
-                        DatabaseReference dr = userinfoRef2.child(dao.getId());
-                        updateDao(dao, 2, userDAOList.get(i).getId());
-                    }
-                    else if(dao.getFriend3().equals("null")){
-                        DatabaseReference dr = userinfoRef2.child(dao.getId());
-                        updateDao(dao, 3, userDAOList.get(i).getId());
-                    }
-                    else if(dao.getFriend4().equals("null")){
-                        DatabaseReference dr = userinfoRef2.child(dao.getId());
-                        updateDao(dao, 4, userDAOList.get(i).getId());
-                    }
-                    //onLoadData(friend_id);
-                    break;
+        for (int i = 0; i < userDAOList.size(); i++) {
+            // 친구 추가 버튼과 일치하는 값이 있다면 추가
+            if (userDAOList.get(i).getId().equals(friend_id)) {
+
+                Map<String, Object> dataValues = new HashMap<>();
+
+                if (dao.getFriend1().equals("null")) {
+                    DatabaseReference dr = userinfoRef2.child(dao.getId());
+                    updateDao(dao, 1, userDAOList.get(i).getId());
+                } else if (dao.getFriend2().equals("null")) {
+                    DatabaseReference dr = userinfoRef2.child(dao.getId());
+                    updateDao(dao, 2, userDAOList.get(i).getId());
+                } else if (dao.getFriend3().equals("null")) {
+                    DatabaseReference dr = userinfoRef2.child(dao.getId());
+                    updateDao(dao, 3, userDAOList.get(i).getId());
+                } else if (dao.getFriend4().equals("null")) {
+                    DatabaseReference dr = userinfoRef2.child(dao.getId());
+                    updateDao(dao, 4, userDAOList.get(i).getId());
                 }
+                //onLoadData(friend_id);
+                break;
             }
+        }
 
     }
 
     // 최종적으로 액티비티에 붙여주는곳
     @Override
-    public void onActivityCreated(Bundle savedInstanceState){
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         user_recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         //user_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -161,7 +159,7 @@ public class HomeFragment extends Fragment {
         userinfoRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     UserDAO dao2 = snapshot.getValue(UserDAO.class);
                     userDAOList.add(dao2);
                 }
@@ -177,7 +175,7 @@ public class HomeFragment extends Fragment {
         userinfoRef.child(login_user).addValueEventListener(new ValueEventListener() {
 
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot){
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 dao = dataSnapshot.getValue(UserDAO.class);
                 //mStorageReference = mFirebaseStorage.getReferenceFromUrl(dao.getUserimg());
                 mStorageReference = mFirebaseStorage.getReferenceFromUrl(dao.getUserimg());
@@ -194,7 +192,7 @@ public class HomeFragment extends Fragment {
 
         });
 
-        floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.room_add_fab);
+        floatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.room_add_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             // 방 추가하는 버튼
             @Override
@@ -208,10 +206,10 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void write(){
+    public void write() {
         System.out.println("이미지URL22 : " + dao.getUserimg());
         removed();
-        for(int i=0; i<=4; i++){
+        for (int i = 0; i <= 4; i++) {
             switch (i) {
                 // 0은 나를 추가하는 부분
                 case 0:
@@ -229,14 +227,15 @@ public class HomeFragment extends Fragment {
 
                                 //write2(friendDao);
                             }
+
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
 
                             }
                         });
                     }
-                     break;
-                case 2 :
+                    break;
+                case 2:
                     if (!dao.getFriend2().equals("null")) {
                         userinfoRef.child(dao.getFriend2().toString()).addValueEventListener(new ValueEventListener() {
                             @Override
@@ -247,6 +246,7 @@ public class HomeFragment extends Fragment {
 
                                 //write2(friendDao);
                             }
+
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
 
@@ -254,7 +254,7 @@ public class HomeFragment extends Fragment {
                         });
                     }
                     break;
-                case 3 :
+                case 3:
                     if (!dao.getFriend3().equals("null")) {
                         userinfoRef.child(dao.getFriend3().toString()).addValueEventListener(new ValueEventListener() {
                             @Override
@@ -264,6 +264,7 @@ public class HomeFragment extends Fragment {
                                 main_joinstateAdapter.addItem(new Contacts(friendDao.getUserimg(), R.drawable.day_background, friendDao.getName(), friendDao.getNick(), friendDao.getId()));
                                 //write2(friendDao);
                             }
+
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
 
@@ -271,7 +272,7 @@ public class HomeFragment extends Fragment {
                         });
                     }
                     break;
-                case 4 :
+                case 4:
                     if (!dao.getFriend4().equals("null")) {
                         userinfoRef.child(dao.getFriend4().toString()).addValueEventListener(new ValueEventListener() {
                             @Override
@@ -282,6 +283,7 @@ public class HomeFragment extends Fragment {
 
                                 //write2(friendDao);
                             }
+
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
 
@@ -290,7 +292,7 @@ public class HomeFragment extends Fragment {
                     }
                     break;
                 default:
-                        break;
+                    break;
             }
         }
 
@@ -298,7 +300,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void updateDao(UserDAO currentDAO, int num, String addfriend){
+    public void updateDao(UserDAO currentDAO, int num, String addfriend) {
         Map<String, Object> dataValues = new HashMap<>();
 
         dataValues.put("id", currentDAO.getId());
@@ -307,8 +309,8 @@ public class HomeFragment extends Fragment {
         dataValues.put("bir", currentDAO.getBir());
         dataValues.put("nick", currentDAO.getNick());
         dataValues.put("userimg", currentDAO.getUserimg());
-        switch (num){
-            case 1 :
+        switch (num) {
+            case 1:
                 dataValues.put("friend1", addfriend);
                 dataValues.put("friend2", currentDAO.getFriend2());
                 dataValues.put("friend3", currentDAO.getFriend3());
@@ -332,12 +334,12 @@ public class HomeFragment extends Fragment {
                 dataValues.put("friend3", currentDAO.getFriend3());
                 dataValues.put("friend4", addfriend);
                 break;
-                default:
-                    dataValues.put("friend1", currentDAO.getFriend1());
-                    dataValues.put("friend2", currentDAO.getFriend2());
-                    dataValues.put("friend3", currentDAO.getFriend3());
-                    dataValues.put("friend4", currentDAO.getFriend4());
-                    break;
+            default:
+                dataValues.put("friend1", currentDAO.getFriend1());
+                dataValues.put("friend2", currentDAO.getFriend2());
+                dataValues.put("friend3", currentDAO.getFriend3());
+                dataValues.put("friend4", currentDAO.getFriend4());
+                break;
         }
 
         //Ref2는 없어도 됨
@@ -345,7 +347,7 @@ public class HomeFragment extends Fragment {
         dr.setValue(dataValues);
     }
 
-    public void removed(){
+    public void removed() {
         main_joinstateAdapter.removeItem();
     }
 
