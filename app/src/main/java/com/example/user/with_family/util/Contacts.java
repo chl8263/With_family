@@ -26,14 +26,6 @@ public class Contacts {
         //this.userimg = userimg;
     }
 
-   /* public String getUserimg() {
-        return userimg;
-    }
-
-    public void setUserimg(String userimg) {
-        this.userimg = userimg;
-    }*/
-
     public String getId() {
         return id;
     }
@@ -41,8 +33,6 @@ public class Contacts {
     public void setId(String id) {
         this.id = id;
     }
-
-
 
     public int getBackurl() {
         return backurl;

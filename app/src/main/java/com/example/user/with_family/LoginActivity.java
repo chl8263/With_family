@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     // sharedpreference에 전화번호 저장
-                   sharededitor.putString("myid", telephonyManager.getLine1Number());
+                   //sharededitor.putString("myid", telephonyManager.getLine1Number());
                     //sharededitor.commit();
 
                     id_edittext.setText(telephonyManager.getLine1Number());
@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("room_name", userDAOList.get(i).getRoom_name());
                         sharededitor.putString("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.putString("myid", userDAOList.get(i).getId());
                         sharededitor.commit();
                         startActivity(intent);
                         break;

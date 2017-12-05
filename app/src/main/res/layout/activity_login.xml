@@ -64,6 +64,7 @@
                 android:hint="아이디"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:text="+821090835389"
                 android:id="@+id/login_edit_id_text"/>
 
 

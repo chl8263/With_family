@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,6 +43,7 @@ import java.util.Map;
 public class HomeFragment extends Fragment {
 
     public static Handler mhandler;
+    public Bundle bundle;
     private static final int request_code = 0;
     SharedPreferences sharedPreferences;            // 저장된 현재 접속자 정보
     FirebaseDatabase databaseRef;
@@ -56,6 +59,7 @@ public class HomeFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     private RecyclerView user_recyclerView ;
     private String login_user;
+    private String room;
     private String user_room_name;
     Main_JoinStateAdapter main_joinstateAdapter;
     UserDAO dao;
@@ -80,6 +84,7 @@ public class HomeFragment extends Fragment {
         Bundle args = new Bundle();
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
+
         return fragment;
     }
     @Nullable
@@ -93,33 +98,41 @@ public class HomeFragment extends Fragment {
     }
 
         // 친구 추가버튼에서 넘어온 값
+        @NonNull
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             String friend_id = "+8210";
-
-            if(data.getStringExtra("Result").equals("delete")){
-                Toast.makeText(getContext(), "삭제 : "+ data.getStringExtra("Result"), Toast.LENGTH_LONG).show();
+            try{
+            if (data.getStringExtra("Result").equals("delete")) {
+                Toast.makeText(getContext(), "삭제 : " + data.getStringExtra("Result"), Toast.LENGTH_LONG).show();
             }
-            else if(data.getStringExtra("Result").equals("create_room")){
-                String room = data.getStringExtra("room_name").toString();
+            // 자기 자신이 방을 생성할때
+            else if (data.getStringExtra("Result").equals("create_room")) {
+                room = data.getStringExtra("room_name").toString();
                 System.out.println("값 되돌려받음 : " + room);
                 dao.setRoom_name(room);
-                room_addUser(dao, room);
+                room_addUser(dao, room, 0, "null");
             }
-            else {
+            // 초대를 거부했을때
+            else if (data.getStringExtra("Result").equals("reject")) {
+                room_addUser(dao, "null", 2, "null");
+            } else {
                 friend_id += data.getStringExtra("Result");
 
-                // 친구추가 값(전체 회원목록)에서 해당되는 친구가 있으면 추가
+                // 친구추가 값(전체 회원목록)에서 해당되는 친구가 있으면 추가 (친구DAO, 접속한 유저의 DAO, 인덱스)
                 for (int j = 0; j < userDAOList.size(); j++) {
                     if (userDAOList.get(j).getId().equals(friend_id)) {
-                        room_addUser(userDAOList.get(j), dao.getRoom_name());
+                        room_addUser(userDAOList.get(j), dao.getRoom_name(), 1, dao.getName());
                     }
                 }
             }
 
 
+        }
+        catch (Exception e){
 
+        }
     }
 
     // 최종적으로 액티비티에 붙여주는곳
@@ -151,7 +164,8 @@ public class HomeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dao = dataSnapshot.getValue(UserDAO.class);
                 mStorageReference = mFirebaseStorage.getReferenceFromUrl(dao.getUserimg());
-
+                System.out.println("하히호 : " + mStorageReference.toString());
+                System.out.println("데이터 변경 있음 1");
                 // 사용자가 속한 방이없다면, 있다면 원래대로 데이터를 불러와 띄움
                 if(dao.getRoom_name().equals("null")){
                     System.out.println("뷰 첫번쨰 들어옴");
@@ -165,30 +179,13 @@ public class HomeFragment extends Fragment {
                     home_framelayout.setVisibility(View.VISIBLE);
                     dataRun();
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-
-
-
-    }
-
-    public void dataRun(){
-        // 모든사용자 저장하는곳
-        userinfoRef2.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                CurrentListRemove(userDAOList);
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    UserDAO dao2 = snapshot.getValue(UserDAO.class);
-                    userDAOList.add(dao2);
+                if(dao.getCheck().equals("wait")){
+                    Intent intent = new Intent(getActivity().getApplicationContext(), InviteActivity.class);
+                    intent.putExtra("room", dao.getTemp_room());
+                    intent.putExtra("check", dao.getCheck());
+                    intent.putExtra("invite_name", dao.getInvite_id());
+                    startActivityForResult(intent, request_code);
                 }
             }
 
@@ -198,7 +195,22 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // 방에 있는 사람들 목록 저장하는곳
+        mhandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg){
+                bundle = msg.getData();
+                String url = bundle.getString("url");
+                System.out.println("유아엘 옴 : " + url);
+                room_addUser(dao, room, 9, url);
+            }
+        };
+
+
+
+    }
+
+    public void dataRun(){
+           // 방에 있는 사람들 목록 저장하는곳
         roominfoRef.child(dao.getRoom_name()).child("user_tree").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -207,9 +219,34 @@ public class HomeFragment extends Fragment {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String user = snapshot.getKey().toString();
                     System.out.println("무슨 값이니" + user);
+                    System.out.println("데이터 변경 있음 3");
                     if(!user.equals(dao.getId())){
                         room_userDAOList.add(user);
                     }
+                }
+                loadAllUser();
+                main_joinstateAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        /*// 모든사용자 저장하는곳
+        userinfoRef2.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                CurrentListRemove(userDAOList);
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    UserDAO dao2 = snapshot.getValue(UserDAO.class);
+                    userDAOList.add(dao2);
+                    main_joinstateAdapter.notifyDataSetChanged();
+                    System.out.println("데이터 변경 있음 2");
                 }
                 write();
             }
@@ -218,7 +255,31 @@ public class HomeFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
+
+        /*// 방에 있는 사람들 목록 저장하는곳
+        roominfoRef.child(dao.getRoom_name()).child("user_tree").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                CurrentListRemove(room_userDAOList);
+                room_userDAOList.add(dao.getId());
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String user = snapshot.getKey().toString();
+                    System.out.println("무슨 값이니" + user);
+                    System.out.println("데이터 변경 있음 3");
+                    if(!user.equals(dao.getId())){
+                        room_userDAOList.add(user);
+                    }
+                }
+                //write();
+                main_joinstateAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
 
 
 
@@ -240,6 +301,7 @@ public class HomeFragment extends Fragment {
         for(int i=0; i<room_userDAOList.size(); i++){
             if(i==0){
                 main_joinstateAdapter.addItem(new Contacts(mStorageReference.toString(), R.drawable.day_background, dao.getName(), dao.getNick(), dao.getId())); // 이미지 url, 이름 name
+                main_joinstateAdapter.notifyDataSetChanged();
             }
             else {
                 System.out.println("사이즈 1 : " + room_userDAOList.size());
@@ -251,25 +313,30 @@ public class HomeFragment extends Fragment {
 
                     if(room_userDAOList.get(i).toString().equals(userDAOList.get(j).getId().toString())){
                         main_joinstateAdapter.addItem(new Contacts(userDAOList.get(j).getUserimg(), R.drawable.day_background, userDAOList.get(j).getName(), userDAOList.get(j).getNick(), userDAOList.get(j).getId())); // 이미지 url, 이름 name
+                        main_joinstateAdapter.notifyDataSetChanged();
                     }
                 }
             }
         }
     }
 
-    public void room_addUser(UserDAO userDAO, String room_name){
+    // index 값이 0이면 자기 자신이 방을 만들었을때, index값이 1이면 친구에게 초대보냈을때
+    public void room_addUser(UserDAO userDAO, String room_name, int index, String invite_name){
         //room에 해당되는 데이터베이스에 저장하는 부분
-        Map<String, Object> dataValues = new HashMap<>();
+        if(index==0) {
+            Map<String, Object> dataValues = new HashMap<>();
 
-        dataValues.put("id", userDAO.getId());
-        dataValues.put("pw", userDAO.getPw());
-        dataValues.put("name", userDAO.getName());
-        dataValues.put("bir", userDAO.getBir());
-        dataValues.put("nick", userDAO.getNick());
-        dataValues.put("userimg", userDAO.getUserimg());
+            dataValues.put("id", userDAO.getId());
+            dataValues.put("pw", userDAO.getPw());
+            dataValues.put("name", userDAO.getName());
+            dataValues.put("bir", userDAO.getBir());
+            dataValues.put("nick", userDAO.getNick());
+            dataValues.put("userimg", userDAO.getUserimg());
 
-        DatabaseReference dr = roominfoRef.child(room_name).child("user_tree").child(userDAO.getId());
-        dr.setValue(dataValues);
+            DatabaseReference dr = roominfoRef.child(room_name).child("user_tree").child(userDAO.getId());
+            dr.setValue(dataValues);
+        }
+
 
         // 본래 회원정보에 room을 추가해주는 부분
         Map<String, Object> dataValues2 = new HashMap<>();
@@ -279,17 +346,46 @@ public class HomeFragment extends Fragment {
         dataValues2.put("name", userDAO.getName());
         dataValues2.put("bir", userDAO.getBir());
         dataValues2.put("nick", userDAO.getNick());
-        dataValues2.put("userimg", userDAO.getUserimg());
+
         dataValues2.put("friend1", "null");
         dataValues2.put("friend2", "null");
         dataValues2.put("friend3", "null");
         dataValues2.put("friend4", "null");
-        dataValues2.put("room_name", room_name);
+        // 자기가 방을 생성할 때
+        if(index==0){
+            dataValues2.put("userimg", userDAO.getUserimg());
+            dataValues2.put("room_name", room_name);
+            dataValues2.put("check", "ok");
+            dataValues2.put("temp_room", room_name);
+            dataValues2.put("invite_id", "null");
+        }
+        //해당 친구에게 초대를 보낼 때
+        else if(index==1){
+            dataValues2.put("userimg", userDAO.getUserimg());
+            dataValues2.put("room_name", "null");
+            dataValues2.put("check", "wait");
+            dataValues2.put("temp_room", room_name);
+            dataValues2.put("invite_id", invite_name);
+        }
+        //초대 거부했을때- room_name에는 null값이 들어옴
+        else if(index==2){
+            dataValues2.put("userimg", userDAO.getUserimg());
+            dataValues2.put("room_name", "null");
+            dataValues2.put("check", "null");
+            dataValues2.put("temp_room", "null");
+            dataValues2.put("invite_id", "null");
+        }
+        // 사용자 이미지 변경한거임
+        else if(index==9){
+            dataValues2.put("userimg", invite_name);
+            dataValues2.put("room_name", userDAO.getRoom_name());
+            dataValues2.put("check", userDAO.getCheck());
+            dataValues2.put("temp_room", userDAO.getTemp_room());
+            dataValues2.put("invite_id", userDAO.getInvite_id());
+        }
 
         DatabaseReference dr2 = userinfoRef2.child(userDAO.getId());
         dr2.setValue(dataValues2);
-
-
     }
 
     public void removed(){
@@ -301,6 +397,29 @@ public class HomeFragment extends Fragment {
         for(int i=0; i<size; i++) {
             arrayList.remove(0);
         }
+    }
+
+    public void loadAllUser(){
+        // 모든사용자 저장하는곳
+        userinfoRef2.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                CurrentListRemove(userDAOList);
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    UserDAO dao2 = snapshot.getValue(UserDAO.class);
+                    userDAOList.add(dao2);
+                    main_joinstateAdapter.notifyDataSetChanged();
+                    System.out.println("데이터 변경 있음 2");
+                }
+                write();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

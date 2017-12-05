@@ -187,7 +187,11 @@ public class UserInfoActivity extends AppCompatActivity {
             String[] mobNum = str.split("\\+");
             str = mobNum[1];
 
-            final StorageReference filepath = FirebaseStorage.getInstance().getReference().child(str).child("1");
+            int a = (int)(Math.random()*100);
+            String j = Integer.toString(a);
+            System.out.println("유아엘 보내기전 : " + j);
+
+            final StorageReference filepath = FirebaseStorage.getInstance().getReference().child(str).child(j);
             filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -196,6 +200,14 @@ public class UserInfoActivity extends AppCompatActivity {
                     // 데이터베이스도 갱신(스토리지에 있는 유저img 경로)
                     updateDao(dao, filepath.toString());
                     System.out.println("file" + filepath.toString());
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", filepath.toString() );
+                    Message msg = new Message();
+                    msg.setData(bundle);
+                    HomeFragment.mhandler.sendMessage(msg);
+
+                    finish();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -220,6 +232,10 @@ public class UserInfoActivity extends AppCompatActivity {
         dataValues.put("friend2", currentDAO.getFriend2());
         dataValues.put("friend3", currentDAO.getFriend3());
         dataValues.put("friend4", currentDAO.getFriend4());
+        dataValues.put("room_name", currentDAO.getRoom_name());
+        dataValues.put("check", currentDAO.getCheck());
+        dataValues.put("temp_room", currentDAO.getTemp_room());
+        dataValues.put("invite_id", currentDAO.getInvite_id());
 
         //Ref2는 없어도 됨
         DatabaseReference dr = userinfoRef.child(dao.getId());

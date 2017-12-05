@@ -16,6 +16,9 @@ public class UserDAO {
     private String friend4;
     private String userimg;
     private String room_name;
+    private String check;
+    private String temp_room;
+    private String invite_id;
 
 
 
@@ -35,6 +38,30 @@ public class UserDAO {
         this.friend4 = friend4;
         this.userimg = userimg;
         this.room_name = room_name;
+    }
+
+    public String getInvite_id() {
+        return invite_id;
+    }
+
+    public void setInvite_id(String invite_id) {
+        this.invite_id = invite_id;
+    }
+
+    public String getCheck() {
+        return check;
+    }
+
+    public void setCheck(String check) {
+        this.check = check;
+    }
+
+    public String getTemp_room() {
+        return temp_room;
+    }
+
+    public void setTemp_room(String temp_room) {
+        this.temp_room = temp_room;
     }
 
     public String getRoom_name() {
