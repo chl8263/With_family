@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                    sharededitor.putString("myid", telephonyManager.getLine1Number());
                     //sharededitor.commit();
 
-                    id_edittext.setText(telephonyManager.getLine1Number());
+                    //id_edittext.setText(telephonyManager.getLine1Number());
                     Toast.makeText(getApplicationContext(), telephonyManager.getLine1Number(), Toast.LENGTH_LONG).show();
 
                 }

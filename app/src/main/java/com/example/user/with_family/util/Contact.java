@@ -6,7 +6,7 @@ package com.example.user.with_family.util;
 
 public class Contact {
     public static String MyMainRoom;
-
+    public static String MyName;
     public static String Real_Finish = "Real_Finish";
     public static String SAVE_DB = "SAVE_DB";
     public static String viewpager_left = "viewpager_left";
