@@ -50,21 +50,19 @@ public class LoginActivity extends AppCompatActivity {
         //data_allRef = database.getReference().child("register");
 
         telephonyManager = (TelephonyManager) getSystemService(getApplicationContext().TELEPHONY_SERVICE);      // 전화번호 가져오는 서비스
-        id_edittext = (EditText)findViewById(R.id.login_edit_id_text);
-        pw_edittext = (EditText)findViewById(R.id.login_edit_pw_text);
-        login_btn = (Button)findViewById(R.id.login_loginBtn);
-        login_register = (Button)findViewById(R.id.login_register);
+        id_edittext = (EditText) findViewById(R.id.login_edit_id_text);
+        pw_edittext = (EditText) findViewById(R.id.login_edit_pw_text);
+        login_btn = (Button) findViewById(R.id.login_loginBtn);
+        login_register = (Button) findViewById(R.id.login_register);
 
         // 외부저장소, 내부저장소 읽기 쓰기 권한 받아오기
-        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
-        {
+        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this, new String[]{
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             }, 466);
         }
 
-        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
-        {
+        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this, new String[]{
                     android.Manifest.permission.READ_EXTERNAL_STORAGE,
             }, 466);
@@ -76,13 +74,13 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         //권한이 이미 있다면 바로 id 부분에 ID값(=전화번호)을 띄움
-        else{
+        else {
             // OnClick리스너는 2번을 눌러야 되서 Focus가 잡히면 자동으로 id=전화번호 가져오게함
             id_edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     // sharedpreference에 전화번호 저장
-                   //sharededitor.putString("myid", telephonyManager.getLine1Number());
+                   sharededitor.putString("myid", telephonyManager.getLine1Number());
                     //sharededitor.commit();
 
                     id_edittext.setText(telephonyManager.getLine1Number());
@@ -124,7 +122,6 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("room_name", userDAOList.get(i).getRoom_name());
                         sharededitor.putString("room_name", userDAOList.get(i).getRoom_name());
-                        sharededitor.putString("myid", userDAOList.get(i).getId());
                         sharededitor.commit();
                         startActivity(intent);
                         break;
