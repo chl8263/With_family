@@ -17,9 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.with_family.R;
+import com.example.user.with_family.util.Contact;
 import com.example.user.with_family.util.Contacts;
 import com.example.user.with_family.util.UserDAO;
 import com.google.firebase.database.DataSnapshot;
@@ -52,6 +54,8 @@ public class HomeFragment extends Fragment {
 
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mStorageReference;
+
+    private TextView main_room_name;
 
     private RelativeLayout home_relativelayout;
     private FrameLayout home_framelayout;
@@ -187,6 +191,19 @@ public class HomeFragment extends Fragment {
                     intent.putExtra("invite_name", dao.getInvite_id());
                     startActivityForResult(intent, request_code);
                 }
+
+                Contact.MyMainRoom = dao.getRoom_name();
+                Contact.MyName = dao.getName();
+
+                // 맨위 속한 그룹이 어딘지 표시해주는 메인액티비티에 있는 텍스트뷰
+                main_room_name = (TextView)getActivity().findViewById(R.id.main_room_name);
+                if(dao.getRoom_name().equals("null")){
+                    main_room_name.setText("그룹이 없습니다");
+                }
+                else
+                    main_room_name.setText(Contact.MyMainRoom);
+
+                System.out.println(" 내이름 : " + dao.getName());
             }
 
             @Override

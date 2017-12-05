@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         opendrawlayout = (TextView) findViewById(R.id.open_draw);
         opendrawlayout.setOnClickListener(this);
-        set_Dday = (TextView) findViewById(R.id.dday);
+        set_Dday = (TextView) findViewById(R.id.main_room_name);
         drawlayout_recyclerview = (RecyclerView) findViewById(R.id.drawlayout_recyclerview);
         drawlayout_recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         drawItems = new ArrayList<DrawItem>();

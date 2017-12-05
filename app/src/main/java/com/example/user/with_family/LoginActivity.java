@@ -1,11 +1,16 @@
 package com.example.user.with_family;
 
 import android.Manifest;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -36,8 +41,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText pw_edittext;
     private Button login_btn;
     private Button login_register;
+    private Button practice;
 
     private static List<UserDAO> userDAOList = new ArrayList<>();      // 유저 정보들 저장해놓을 리스트
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     // sharedpreference에 전화번호 저장
-                   sharededitor.putString("myid", telephonyManager.getLine1Number());
+                    sharededitor.putString("myid", telephonyManager.getLine1Number());
                     //sharededitor.commit();
 
                     //id_edittext.setText(telephonyManager.getLine1Number());
@@ -93,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
             userinfoRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         UserDAO dao = snapshot.getValue(UserDAO.class);
                         userDAOList.add(dao);
 
@@ -101,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
 
-               @Override
+                @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
@@ -112,11 +119,11 @@ public class LoginActivity extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 //만약 가져온 데이터중 지금 ID(핸드폰번호)와 비밀번호가 일치한다면 로그인 ok
-                for(int i=0; i<userDAOList.size(); i++){
+                //만약 가져온 데이터중 지금 ID(핸드폰번호)와 비밀번호가 일치한다면 로그인 ok
+                for (int i = 0; i < userDAOList.size(); i++) {
 
-                    if(userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
-                            userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())){
+                    if (userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
+                            userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())) {
 
                         Toast.makeText(getApplicationContext(), "로그인 ON!!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -127,14 +134,14 @@ public class LoginActivity extends AppCompatActivity {
                         break;
                     }
                     // ID와 PW가 틀릴때
-                    else if(userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
-                            !userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())){
+                    else if (userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
+                            !userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())) {
 
                         Toast.makeText(getApplicationContext(), "ID와 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
                         break;
                     }
                     // ID가 존재하지않을때 -> 회원가입이 필요할때
-                    else{
+                    else {
                         Toast.makeText(getApplicationContext(), "회원가입이 필요하신 ID입니다", Toast.LENGTH_SHORT).show();
                     }
 
@@ -152,17 +159,28 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    };
 
 
+    // 노티피케이션 연습용 버튼
+    public void showNotification(View v) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.user_img);
+        builder.setContentTitle("My MYMy");
+        builder.setContentText("this is practice");
 
+        Intent intent = new Intent(this, MainActivity.class);
 
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(0, builder.build());
 
-
-
-
-    }
-
-
+     }
 
 
 }
+
