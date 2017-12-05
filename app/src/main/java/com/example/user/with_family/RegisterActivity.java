@@ -66,8 +66,10 @@ public class RegisterActivity extends Activity {
                 dataValues.put("friend2", "null");
                 dataValues.put("friend3", "null");
                 dataValues.put("friend4", "null");
-                dataValues.put("userimg", "null");
+                dataValues.put("userimg", "gs://ahntanwithfamily.appspot.com/default/user.jpg");
                 dataValues.put("room_name", "null");
+                dataValues.put("check", "null");
+                dataValues.put("temp_room", "null");
 
 
                 DatabaseReference dr = data_allRef.child("user").child(id_editText.getHint().toString());
