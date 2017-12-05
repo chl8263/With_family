@@ -398,7 +398,7 @@ public class HomeFragment extends Fragment {
             arrayList.remove(0);
         }
     }
-
+//
     public void loadAllUser(){
         // 모든사용자 저장하는곳
         userinfoRef2.addValueEventListener(new ValueEventListener() {
