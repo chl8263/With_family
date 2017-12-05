@@ -1,12 +1,12 @@
 package com.example.user.with_family.util;
 
-import java.util.ArrayList;
-
 /**
  * Created by Note on 2017-11-21.
  */
 
 public class Contact {
+    public static String MyMainRoom;
+
     public static String Real_Finish = "Real_Finish";
     public static String SAVE_DB = "SAVE_DB";
     public static String viewpager_left = "viewpager_left";

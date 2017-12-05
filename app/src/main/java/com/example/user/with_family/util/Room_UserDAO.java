@@ -4,7 +4,7 @@ package com.example.user.with_family.util;
  * Created by 안탄 on 2017-11-19.
  */
 
-public class room_UserDAO {
+public class Room_UserDAO {
     private String id;
     private String pw;
     private String bir;
@@ -13,11 +13,11 @@ public class room_UserDAO {
     private String userimg;
 
 
-    public room_UserDAO(){
+    public Room_UserDAO(){
 
     }
 
-    public room_UserDAO(String id, String pw, String bir, String name, String nick, String userimg){
+    public Room_UserDAO(String id, String pw, String bir, String name, String nick, String userimg){
         this.id = id;
         this.pw = pw;
         this.bir = bir;

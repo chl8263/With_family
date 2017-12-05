@@ -5,17 +5,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.user.with_family.R;
-import com.google.firebase.database.ChildEventListener;
+import com.example.user.with_family.util.Room_UserDAO;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -29,7 +31,10 @@ public class Chat_Fragment   extends Fragment {
     private ArrayList<ChatRoom_item> items;
     private TextView chatroom_isnull;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference chatroom = firebaseDatabase.getReference("chatroom");
+    private DatabaseReference myMainRoom = firebaseDatabase.getReference("register").child("r_room").child("hello");
+    private DatabaseReference room_users = myMainRoom.child("user_tree");
+
+
     public Chat_Fragment(){
 
     }
@@ -60,6 +65,7 @@ public class Chat_Fragment   extends Fragment {
             chatroom_isnull.setVisibility(view.INVISIBLE);
         }
         Init();
+        makeChatRoom();
         return view;
     }
 
@@ -76,7 +82,7 @@ public class Chat_Fragment   extends Fragment {
         //items.add(new ChatRoom_item("aa","aa","aa"));
         items.add(new ChatRoom_item("bb","aa","bb"));
         items.add(new ChatRoom_item("aa","aa","aa"));
-        chatroom.addChildEventListener(new ChildEventListener() {
+        /*chatroom.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -101,8 +107,53 @@ public class Chat_Fragment   extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+        });*/
+
+    }
+    private void makeChatRoom(){
+        room_users.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Room_UserDAO dao = (Room_UserDAO) snapshot.getValue();
+                    Log.e("sdsdsd",dao.getName());
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
 
+        /*room_users.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        })*/
     }
 }
 
