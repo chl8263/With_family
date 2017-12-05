@@ -11,8 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.user.with_family.Interfaces.ChatRoom_Refresh_callback;
 import com.example.user.with_family.R;
-import com.example.user.with_family.util.Room_UserDAO;
+import com.example.user.with_family.util.Contact;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,22 +26,23 @@ import java.util.ArrayList;
  * Created by User on 2017-11-11.
  */
 
-public class Chat_Fragment   extends Fragment {
+public class ChatRoom_Fragment extends Fragment {
     private RecyclerView chatRoom_recyclerView;
     private ChatRoom_adapter chatRoom_adapter;
     private ArrayList<ChatRoom_item> items;
     private TextView chatroom_isnull;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference myMainRoom = firebaseDatabase.getReference("register").child("r_room").child("hello");
+    private DatabaseReference myMainRoom = firebaseDatabase.getReference("register").child("r_room").child("룸");
     private DatabaseReference room_users = myMainRoom.child("user_tree");
+    private DatabaseReference chat_room = myMainRoom.child("chat_room");
 
 
-    public Chat_Fragment(){
+    public ChatRoom_Fragment(){
 
     }
-    public static Chat_Fragment newInstance() {
+    public static ChatRoom_Fragment newInstance() {
         Bundle args = new Bundle();
-        Chat_Fragment fragment = new Chat_Fragment();
+        ChatRoom_Fragment fragment = new ChatRoom_Fragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,13 +61,13 @@ public class Chat_Fragment   extends Fragment {
         chatRoom_recyclerView = (RecyclerView)view.findViewById(R.id.chatroom_recycleview);
         items = new ArrayList<ChatRoom_item>();
         Init();
+        makeChatRoom();
         if(items.size()==0){
             chatroom_isnull.setVisibility(view.VISIBLE);
         }else {
             chatroom_isnull.setVisibility(view.INVISIBLE);
         }
-        Init();
-        makeChatRoom();
+
         return view;
     }
 
@@ -75,50 +77,33 @@ public class Chat_Fragment   extends Fragment {
     }
 
     private void Init(){
-        chatRoom_adapter = new ChatRoom_adapter(getContext(),items);
+        chatRoom_adapter = new ChatRoom_adapter(getContext(),items,callback);
         chatRoom_recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-
         chatRoom_recyclerView.setAdapter(chatRoom_adapter);
-        //items.add(new ChatRoom_item("aa","aa","aa"));
-        items.add(new ChatRoom_item("bb","aa","bb"));
-        items.add(new ChatRoom_item("aa","aa","aa"));
-        /*chatroom.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
     }
+
     private void makeChatRoom(){
+
         room_users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> a = new ArrayList<String>();
+                ArrayList<String> b = new ArrayList<String>();
+                String all="";
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Room_UserDAO dao = (Room_UserDAO) snapshot.getValue();
-                    Log.e("sdsdsd",dao.getName());
+                    String name = (String) snapshot.child("name").getValue();
+                    Log.e("sdsdsd",name);
+                    a.add(name);
+                }
+                for(int i=0;i<a.size()-1;i++){
+                    b.add(a.get(0)+","+a.get(i+1));
+                }
+                b.add(Contact.MyMainRoom);
+                for(int i=0;i<b.size()-1;i++){
+                    items.add(new ChatRoom_item(b.get(i),"aa","aa"));
                 }
 
+                chatRoom_adapter.notifyDataSetChanged();
 
             }
 
@@ -127,34 +112,16 @@ public class Chat_Fragment   extends Fragment {
 
             }
         });
-
-        /*room_users.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        })*/
     }
+    private ChatRoom_Refresh_callback callback = new ChatRoom_Refresh_callback() {
+        @Override
+        public void refresh(ChatRoom_item o, int position) {
+            items.get(position).setContent(o.getContent());
+            items.get(position).setTime(o.getTime());
+            chatRoom_adapter.notifyDataSetChanged();
+        }
+
+    };
 }
 
 

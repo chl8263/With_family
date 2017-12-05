@@ -43,6 +43,7 @@
         <activity
             android:name=".ui.f_home.InviteActivity"
             android:theme="@style/Theme.AppCompat.Dialog"/>
+        <activity android:name=".ui.ChatActivity.ChatActivity"/>
     </application>
 
 </manifest>

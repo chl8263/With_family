@@ -30,7 +30,7 @@ import com.example.user.with_family.ui.drawlayout.DrawAdapter;
 import com.example.user.with_family.ui.drawlayout.DrawItem;
 import com.example.user.with_family.ui.f_album.Album_Fragment;
 import com.example.user.with_family.ui.f_calendar.Calendar_Fragment;
-import com.example.user.with_family.ui.f_chat.Chat_Fragment;
+import com.example.user.with_family.ui.f_chat.ChatRoom_Fragment;
 import com.example.user.with_family.ui.f_control.ControlFragment;
 import com.example.user.with_family.ui.f_home.HomeFragment;
 
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private long backPressedTime = 0;
     private Album_Fragment albumFragment;
     private Calendar_Fragment calendarFragment;
-    private Chat_Fragment chatFragment;
+    private ChatRoom_Fragment chatFragment;
     private ControlFragment controlFragment;
     private HomeFragment homeFragment;
     private DrawerLayout drawerLayout;
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void initView() {
         albumFragment = Album_Fragment.newInstance();
         calendarFragment = Calendar_Fragment.newInstance();
-        chatFragment = Chat_Fragment.newInstance();
+        chatFragment = ChatRoom_Fragment.newInstance();
         controlFragment = ControlFragment.newInstance();
         homeFragment = HomeFragment.newInstance();
         initNavView();
