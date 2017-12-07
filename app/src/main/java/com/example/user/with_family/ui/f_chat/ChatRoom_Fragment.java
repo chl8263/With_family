@@ -95,12 +95,16 @@ public class ChatRoom_Fragment extends Fragment {
                     Log.e("sdsdsd",name);
                     a.add(name);
                 }
-                for(int i=0;i<a.size()-1;i++){
-                    b.add(a.get(0)+","+a.get(i+1));
+                for(int i=0;i<a.size();i++){
+                    b.add(a.get(i));
                 }
                 b.add(Contact.MyMainRoom);
-                for(int i=0;i<b.size()-1;i++){
-                    items.add(new ChatRoom_item(b.get(i),"aa","aa"));
+                for(int i=0;i<b.size();i++){
+                    if(!b.get(i).equals(Contact.MyName)){
+
+                        items.add(new ChatRoom_item(b.get(i),"aa","aa"));
+                    }
+
                 }
 
                 chatRoom_adapter.notifyDataSetChanged();

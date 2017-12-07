@@ -8,7 +8,6 @@ public class ChatRoom_item {
     private String name;
     private String content;
     private String time;
-
     public ChatRoom_item(String name, String content, String time) {
         this.name = name;
         this.content = content;

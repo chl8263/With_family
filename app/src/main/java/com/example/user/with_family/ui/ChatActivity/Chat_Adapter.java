@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.user.with_family.R;
+import com.example.user.with_family.util.Contact;
 
 import java.util.ArrayList;
 
@@ -35,14 +36,14 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item_other, parent, false);
             return new ViewHolder_OTHER(view);
         }    }
-    /*@Override
+    @Override
     public int getItemViewType(int position) {
-        if (items.get(position).getViewType() == VIEW_TYPE_ME) {
+        if (items.get(position).getName().equals(Contact.MyName)) {
             return VIEW_TYPE_ME;
         } else {
             return VIEW_TYPE_YOU;
         }
-    }*/
+    }
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof ViewHolder_ME){

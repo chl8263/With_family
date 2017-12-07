@@ -44,7 +44,6 @@
             android:name=".ui.f_home.InviteActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".ui.ChatActivity.ChatActivity" />
-        <activity android:name=".ui.f_album.Album_Adapter2"></activity>
     </application>
 
 </manifest>

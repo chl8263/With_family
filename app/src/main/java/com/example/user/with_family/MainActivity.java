@@ -33,6 +33,11 @@ import com.example.user.with_family.ui.f_calendar.Calendar_Fragment;
 import com.example.user.with_family.ui.f_chat.ChatRoom_Fragment;
 import com.example.user.with_family.ui.f_control.ControlFragment;
 import com.example.user.with_family.ui.f_home.HomeFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +67,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public String user_room_name;
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
 
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference myMainRoom = firebaseDatabase.getReference("register").child("r_room").child("룸");
+    private DatabaseReference room_users = myMainRoom.child("user_tree");
+    private DatabaseReference chat_room = myMainRoom.child("chat_room");
+    private DatabaseReference chat = myMainRoom.child("chat");
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sharededitor.commit();
 
         //initStatusbar();
+        initChatRoom();
         init();
         setDrawerLayout();
         initView();
@@ -89,7 +101,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
     }
+    private void initChatRoom(){
+        room_users.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String name = (String) snapshot.child("name").getValue();
+                    Log.e("Mina_name",name);
+                    
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
     @Override
     public void onBackPressed() {
         long tempTime = System.currentTimeMillis();
