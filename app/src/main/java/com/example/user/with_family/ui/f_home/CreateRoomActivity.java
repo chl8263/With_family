@@ -46,4 +46,13 @@ public class CreateRoomActivity extends AppCompatActivity {
 
 
     }
+
+    // 뒤로가기 버튼 처리
+    @Override
+    public void onBackPressed(){
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("Result", "cancle");
+        setResult(RESULT_OK, resultIntent);
+        finish();
+    }
 }

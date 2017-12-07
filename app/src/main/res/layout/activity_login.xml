@@ -62,9 +62,9 @@
 
             <EditText
                 android:hint="아이디"
-                android:layout_width="150dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:text="+821090835389"
+                android:text="+821041199582"
                 android:id="@+id/login_edit_id_text"/>
 
 
@@ -87,7 +87,7 @@
             <EditText
                 android:hint="패스워드"
                 android:text="1234"
-                android:layout_width="150dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/login_edit_pw_text"/>
 
@@ -115,6 +115,18 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="12dp"
             android:background="@drawable/button"/>
+
+        <Button
+            android:id="@+id/pratice"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:text="pratice"
+            android:textStyle="italic"
+            android:layout_below="@+id/login_register"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button"
+            android:onClick="showNotification"/>
 
     </RelativeLayout>
 </LinearLayout>

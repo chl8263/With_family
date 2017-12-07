@@ -51,9 +51,9 @@
                android:layout_height="wrap_content"
                android:layout_gravity="center_horizontal"
                android:hint="IDddddd"
-               android:textSize="18dp"
-               android:clickable="false"
-               android:focusable="false"/>
+               android:textSize="18dp"/>
+              <!-- android:clickable="false"
+               android:focusable="false"-->
 
        </LinearLayout>
 
