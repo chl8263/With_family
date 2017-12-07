@@ -60,14 +60,14 @@ public class ChatRoom_Fragment extends Fragment {
         chatroom_isnull = (TextView)view.findViewById(R.id.chatroom_isnull);
         chatRoom_recyclerView = (RecyclerView)view.findViewById(R.id.chatroom_recycleview);
         items = new ArrayList<ChatRoom_item>();
-        Init();
-        makeChatRoom();
+
         if(items.size()==0){
             chatroom_isnull.setVisibility(view.VISIBLE);
         }else {
             chatroom_isnull.setVisibility(view.INVISIBLE);
         }
-
+        Init();
+        makeChatRoom();
         return view;
     }
 

@@ -1,8 +1,10 @@
 package com.example.user.with_family.ui.ChatActivity;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,14 +41,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference room_users = myMainRoom.child("user_tree");
     private DatabaseReference chat_room = myMainRoom.child("chat_room");
     private DatabaseReference chat = myMainRoom.child("chat");
-
+    private FloatingActionButton fab,fab1,fab2,fab3;
+    private boolean isFABopen= false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_chat);
 
-
+        initFab();
         init();
     }
 
@@ -75,7 +78,66 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
         return true;
     }
+    private void initFab(){
+        fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab1 = (FloatingActionButton)findViewById(R.id.fab1);
+        fab2 = (FloatingActionButton)findViewById(R.id.fab2);
+        fab3 = (FloatingActionButton)findViewById(R.id.fab3);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isFABopen){
+                    showFABMenu();
+                }else {
 
+                }
+            }
+        });
+
+    }
+    private void showFABMenu(){
+        isFABopen=true;
+        fab1.setVisibility(View.VISIBLE);
+        fab2.setVisibility(View.VISIBLE);
+        fab3.setVisibility(View.VISIBLE);
+
+        fab.animate().rotationBy(180);
+        fab1.animate().translationY(-55);
+        fab2.animate().translationY(-100);
+        fab3.animate().translationY(-145);
+    }
+    private void closeFABMenu(){
+        isFABopen=false;
+        fab.animate().rotationBy(-180);
+        fab1.animate().translationY(0);
+        fab2.animate().translationY(0);
+        fab3.animate().translationY(0).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                if(!isFABopen){
+                    fab1.setVisibility(View.GONE);
+                    fab2.setVisibility(View.GONE);
+                    fab3.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+    }
     private void init() {
 
         Intent intent = getIntent();
