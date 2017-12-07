@@ -1,5 +1,6 @@
 package com.example.user.with_family.Interfaces;
 
+import com.example.user.with_family.ui.ChatActivity.Chat_item;
 import com.example.user.with_family.ui.f_chat.ChatRoom_item;
 
 /**
@@ -7,5 +8,5 @@ import com.example.user.with_family.ui.f_chat.ChatRoom_item;
  */
 
 public interface ChatRoom_Refresh_callback {
-    public void refresh(ChatRoom_item o, int position);
+    public void refresh(Chat_item o, int position);
 }

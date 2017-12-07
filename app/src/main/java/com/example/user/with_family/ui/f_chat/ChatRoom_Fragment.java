@@ -1,5 +1,9 @@
 package com.example.user.with_family.ui.f_chat;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.user.with_family.Interfaces.ChatRoom_Refresh_callback;
 import com.example.user.with_family.R;
+import com.example.user.with_family.ui.ChatActivity.Chat_item;
 import com.example.user.with_family.util.Contact;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +31,7 @@ import java.util.ArrayList;
  * Created by User on 2017-11-11.
  */
 
-public class ChatRoom_Fragment extends Fragment {
+public class ChatRoom_Fragment extends Fragment{
     private RecyclerView chatRoom_recyclerView;
     private ChatRoom_adapter chatRoom_adapter;
     private ArrayList<ChatRoom_item> items;
@@ -53,6 +58,12 @@ public class ChatRoom_Fragment extends Fragment {
 
     }
 
+ /*   @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getContext().unregisterReceiver(receiver);
+    }*/
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,13 +72,17 @@ public class ChatRoom_Fragment extends Fragment {
         chatRoom_recyclerView = (RecyclerView)view.findViewById(R.id.chatroom_recycleview);
         items = new ArrayList<ChatRoom_item>();
 
-        if(items.size()==0){
+       /* IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Contact.refresh_chaatroom);
+        getContext().registerReceiver(receiver, intentFilter);*/
+        Init();
+
+        makeChatRoom();
+        /*if(items.size()==0){
             chatroom_isnull.setVisibility(view.VISIBLE);
         }else {
             chatroom_isnull.setVisibility(view.INVISIBLE);
-        }
-        Init();
-        makeChatRoom();
+        }*/
         return view;
     }
 
@@ -99,14 +114,12 @@ public class ChatRoom_Fragment extends Fragment {
                     b.add(a.get(i));
                 }
                 b.add(Contact.MyMainRoom);
+                Log.e("asd",Contact.MyName);
                 for(int i=0;i<b.size();i++){
                     if(!b.get(i).equals(Contact.MyName)){
-
                         items.add(new ChatRoom_item(b.get(i),"aa","aa"));
                     }
-
                 }
-
                 chatRoom_adapter.notifyDataSetChanged();
 
             }
@@ -119,13 +132,34 @@ public class ChatRoom_Fragment extends Fragment {
     }
     private ChatRoom_Refresh_callback callback = new ChatRoom_Refresh_callback() {
         @Override
-        public void refresh(ChatRoom_item o, int position) {
-            items.get(position).setContent(o.getContent());
-            items.get(position).setTime(o.getTime());
-            chatRoom_adapter.notifyDataSetChanged();
+        public void refresh(Chat_item o, int position) {
+            Log.e("qqqqqqqqqqq","qqqqqqqqqqqq");
+           try{
+                items.get(position).setContent(o.getContent());
+                items.get(position).setTime(o.getTime());
+                chatRoom_adapter.notifyDataSetChanged();
+            }catch (NullPointerException e){}
         }
 
     };
+
+    /*private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            items.clear();
+            if(intent.getAction().equals(Contact.refresh_chaatroom)){
+               String name = intent.getStringExtra("name");
+               String content = intent.getStringExtra("content");
+               String time = intent.getStringExtra("time");
+               for(int i=0;i<items.size();i++){
+                   if(items.get(i).getName().equals(name)){
+                       items.get(i).setTime(time);
+                       items.get(i).setContent(content);
+                   }
+               }
+            }
+        }
+    };*/
 }
 
 

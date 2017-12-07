@@ -1,6 +1,7 @@
 package com.example.user.with_family.ui.ChatActivity;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.user.with_family.Interfaces.DdayListener;
 import com.example.user.with_family.R;
+import com.example.user.with_family.ui.f_chat.ChatRoom_Fragment;
 import com.example.user.with_family.util.Contact;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -49,7 +52,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout fabLayout1, fabLayout2, fabLayout3;
     private boolean isFABopen = false;
     private String roomName = "";
-
+    private int flag=0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,40 +62,54 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         initFab();
         init();
         checkRoom();
-
+        //aaa();
         Log.e("myname", Contact.MyName);
         Log.e("yourname", getName);
     }
 
     private void checkRoom() {
+        if(getName.equals(Contact.MyMainRoom)){
+            roomName=Contact.MyMainRoom;
+            if (flag == 0) {
+                aaa();
+                flag++;
+            }
+        }else {
+            chat.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-        chat.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String key = snapshot.getKey();
-                    Log.e("zzzzzz", key);
-                    if (key.contains(Contact.MyName) && key.contains(getName)) {
-                        roomName = key;
-                        Log.e("checkRoom_ roomname", roomName);
-                        if (roomName.equals("")) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String key = snapshot.getKey();
+                        Log.e("zzzzzz", key);
+                        if (key.contains(Contact.MyName) && key.contains(getName)) {
+                            roomName = key;
+                            Log.e("checkRoom_ roomname", roomName);
 
-                            roomName = getName + "," + Contact.MyName;
-                            Log.e("없어서 만듬", roomName);
-                            aaa();
+
+                        } else {
+                            Log.e("checkRoom_ roomname", roomName);
                         }
+                    }
+                    if (roomName.equals("")) {
 
-                    }else{
-                        Log.e("checkRoom_ roomname", roomName);
+                        roomName = getName + "," + Contact.MyName;
+                        Log.e("없어서 만듬", roomName);
+
+                    }
+                    if (flag == 0) {
+                        aaa();
+                        flag++;
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
+
     }
 
     @Override
@@ -103,7 +120,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Date date = new Date(now);
                 SimpleDateFormat setformat = new SimpleDateFormat("HH:mm");
                 String time = setformat.format(date);
-                Chat_item item = new Chat_item(getName, input.getText().toString(), time);
+                Chat_item item = new Chat_item(Contact.MyName, input.getText().toString(), time);
                 //checkRoom();
                 //aaa();
                 /*if (roomName.equals("")) {
@@ -113,9 +130,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     aaa();
                 }*/
                 chat.child(roomName).push().setValue(item);
+                chat_room.child(Contact.MyName+","+getName).setValue(item);
+                chat_room.child(getName+","+Contact.MyName).setValue(item);
                 input.setText("");
                 adapter.notifyDataSetChanged();
                 chat_RecyclerView.getLayoutManager().scrollToPosition(chat_RecyclerView.getAdapter().getItemCount() - 1);
+                Intent intent = new Intent(Contact.refresh_chaatroom);
+                intent.putExtra("name",item.getName());
+                intent.putExtra("content",item.getContent());
+                intent.putExtra("time",item.getTime());
+                sendBroadcast(intent);
                 break;
         }
     }

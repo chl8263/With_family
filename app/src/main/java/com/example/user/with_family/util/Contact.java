@@ -18,6 +18,8 @@ public class Contact {
     public static String WRITE_LIST_GONE = "WRITE_LIST_GONE";
     public static String SELECT_CALENDAR = "SELECT_CALENDAR";
 
+    public static String refresh_chaatroom="refresh_chaatroom";
+
     public static String YEAR = "YEAR";
     public static String MONTH = "MONTH";
     public static String DAY = "DAY";
