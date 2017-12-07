@@ -1,17 +1,12 @@
 package com.example.user.with_family;
 
-import android.Manifest;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -19,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.user.with_family.util.Contact;
 import com.example.user.with_family.util.UserDAO;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,15 +32,16 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseDatabase databaseRef;
     DatabaseReference userinfoRef;                  // 유저 정보 가져오는 레퍼런스
 
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
     private TelephonyManager telephonyManager;
     private EditText id_edittext;
     private EditText pw_edittext;
     private Button login_btn;
     private Button login_register;
-    private Button practice;
 
     private static List<UserDAO> userDAOList = new ArrayList<>();      // 유저 정보들 저장해놓을 리스트
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,56 +51,48 @@ public class LoginActivity extends AppCompatActivity {
         sharededitor = sharedPreferences.edit();
         databaseRef = FirebaseDatabase.getInstance();
         userinfoRef = databaseRef.getReference().child("register").child("user");
-        //data_allRef = database.getReference().child("register");
+        id_edittext = (EditText)findViewById(R.id.login_edit_id_text);
+        pw_edittext = (EditText)findViewById(R.id.login_edit_pw_text);
+        login_btn = (Button)findViewById(R.id.login_loginBtn);
+        login_register = (Button)findViewById(R.id.login_register);
 
         telephonyManager = (TelephonyManager) getSystemService(getApplicationContext().TELEPHONY_SERVICE);      // 전화번호 가져오는 서비스
-        id_edittext = (EditText) findViewById(R.id.login_edit_id_text);
-        pw_edittext = (EditText) findViewById(R.id.login_edit_pw_text);
-        login_btn = (Button) findViewById(R.id.login_loginBtn);
-        login_register = (Button) findViewById(R.id.login_register);
 
-        // 외부저장소, 내부저장소 읽기 쓰기 권한 받아오기
-        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            }, 466);
-        }
+        checkPermission(Contact.PERMISSIONS);
+        init();
 
-        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            }, 466);
-        }
 
-        //전화번호 가져오기위한 권한, 권한이 없다면 권한승인 여부를 띄움
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 466);
-        }
+    }
 
-        //전화번호 가져오기위한 권한, 권한이 없다면 권한승인 여부를 띄움
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 466);
-        }
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkPermission(String[] permissions) {
 
-        //권한이 이미 있다면 바로 id 부분에 ID값(=전화번호)을 띄움
-        else {
-            // OnClick리스너는 2번을 눌러야 되서 Focus가 잡히면 자동으로 id=전화번호 가져오게함
-            id_edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    // sharedpreference에 전화번호 저장
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
+    }
 
-                    //sharededitor.commit();
+    // Application permission 23
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                int cnt = permissions.length;
+                for (int i = 0; i < cnt; i++) {
 
-                    //id_edittext.setText(telephonyManager.getLine1Number());
-                    Toast.makeText(getApplicationContext(), telephonyManager.getLine1Number(), Toast.LENGTH_LONG).show();
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
 
+                        //Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
+
+                    } else {
+
+
+                    }
                 }
-            });
-
+                break;
         }
+    }
 
-        // 파이어베이스 유저데이터를 가져와서 저장하는 부분
+    private void init() {
+
         userinfoRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -167,28 +156,5 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    };
-
-
-    // 노티피케이션 연습용 버튼
-    public void showNotification(View v) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.user_img);
-        builder.setContentTitle("My MYMy");
-        builder.setContentText("this is practice");
-
-        Intent intent = new Intent(this, MainActivity.class);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(intent);
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(0, builder.build());
-
-     }
-
-
+    }
 }
-
