@@ -167,8 +167,17 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dao = dataSnapshot.getValue(UserDAO.class);
-                mStorageReference = mFirebaseStorage.getReferenceFromUrl(dao.getUserimg());
-                System.out.println("하히호 : " + mStorageReference.toString());
+                try {
+                    mStorageReference = mFirebaseStorage.getReferenceFromUrl(dao.getUserimg());
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+                try {
+                    System.out.println("하히호 : " + mStorageReference.toString());
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+
                 System.out.println("데이터 변경 있음 1");
                 // 사용자가 속한 방이없다면, 있다면 원래대로 데이터를 불러와 띄움
                 if(dao.getRoom_name().equals("null")){
