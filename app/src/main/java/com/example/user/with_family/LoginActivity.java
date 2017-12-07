@@ -80,6 +80,11 @@ public class LoginActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 466);
         }
 
+        //전화번호 가져오기위한 권한, 권한이 없다면 권한승인 여부를 띄움
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 466);
+        }
+
         //권한이 이미 있다면 바로 id 부분에 ID값(=전화번호)을 띄움
         else {
             // OnClick리스너는 2번을 눌러야 되서 Focus가 잡히면 자동으로 id=전화번호 가져오게함
@@ -87,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     // sharedpreference에 전화번호 저장
-                    sharededitor.putString("myid", telephonyManager.getLine1Number());
+
                     //sharededitor.commit();
 
                     //id_edittext.setText(telephonyManager.getLine1Number());
@@ -96,38 +101,41 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
-            // 파이어베이스 유저데이터를 가져와서 저장하는 부분
-            userinfoRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        UserDAO dao = snapshot.getValue(UserDAO.class);
-                        userDAOList.add(dao);
-
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
         }
+
+        // 파이어베이스 유저데이터를 가져와서 저장하는 부분
+        userinfoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserDAO dao = snapshot.getValue(UserDAO.class);
+                    userDAOList.add(dao);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         // [미구현] 로그인 기능 - 아직 아이디 비번 체크 미구현
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("버튼은 눌림" + userDAOList.size());
                 //만약 가져온 데이터중 지금 ID(핸드폰번호)와 비밀번호가 일치한다면 로그인 ok
                 for (int i = 0; i < userDAOList.size(); i++) {
-
+                    System.out.println("유저 정보 " + i + " " + userDAOList.get(i).getId());
                     if (userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
                             userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())) {
 
                         Toast.makeText(getApplicationContext(), "로그인 ON!!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.putString("myid", userDAOList.get(i).getId());
                         sharededitor.putString("room_name", userDAOList.get(i).getRoom_name());
                         sharededitor.commit();
                         startActivity(intent);

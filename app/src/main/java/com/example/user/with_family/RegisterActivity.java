@@ -49,7 +49,7 @@ public class RegisterActivity extends Activity {
 
         sharedPreferences = getSharedPreferences("user_id", MODE_PRIVATE);
 
-        id_editText.setHint(sharedPreferences.getString("myid", "01012345678"));
+        id_editText.setHint(sharedPreferences.getString("myid", "+8210"));
 
         register_ok_btn.setOnClickListener(new View.OnClickListener() {
             @Override

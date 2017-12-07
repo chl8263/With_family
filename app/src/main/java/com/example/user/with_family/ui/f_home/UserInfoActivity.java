@@ -158,7 +158,6 @@ public class UserInfoActivity extends AppCompatActivity {
         user_info_deleteview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // fragment쪽 핸들러로 메세지를 보냄
                 Bundle bundle = new Bundle();
                 bundle.putString("id", user_id );
@@ -166,7 +165,6 @@ public class UserInfoActivity extends AppCompatActivity {
                 Message msg = new Message();
                 msg.setData(bundle);
                 HomeFragment.mhandler.sendMessage(msg);
-
                 finish();
             }
         });

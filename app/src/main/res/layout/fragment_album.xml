@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:orientation="vertical">
@@ -12,11 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/home_frameLayout">
+
         <!-- TODO: Update blank fragment layout -->
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/main_joinstate_recycleview"
+            app:layoutManager="StaggeredGridLayoutManager"
+            app:spanCount="3"
+            android:id="@+id/album_recycleview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             >
 
         </android.support.v7.widget.RecyclerView>
