@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public SharedPreferences sharedPreferences;
     SharedPreferences.Editor sharededitor;
 
-    public  String login_user;
-    public  String user_room_name;
+    public String login_user;
+    public String user_room_name;
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -75,13 +75,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sharedPreferences = getSharedPreferences("user_id", MODE_PRIVATE);
         login_user = sharedPreferences.getString("myid", "01012345678");
         user_room_name = sharedPreferences.getString("room_name", "room_name3");
-        System.out.println("유저 : " + login_user );
+        System.out.println("유저 : " + login_user);
         sharededitor = sharedPreferences.edit();
         sharededitor.putString("myid", login_user);
         sharededitor.putString("room_name", user_room_name);
         sharededitor.commit();
 
-        initStatusbar();
+        //initStatusbar();
         init();
         setDrawerLayout();
         initView();
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < splites.length; i++) {
             Log.e("qqqqqqqqqqqqqqq", splites[i]);
             String tran = String.valueOf(splites[i]);
-            if(tran.length()==8) {
+            if (tran.length() == 8) {
                 String aa = String.valueOf(tran.charAt(0)) + String.valueOf(tran.charAt(1)) + String.valueOf(tran.charAt(2)) + String.valueOf(tran.charAt(3));
                 String bb = String.valueOf(String.valueOf(tran.charAt(4)) + String.valueOf(tran.charAt(5)));
                 String cc = String.valueOf(String.valueOf(tran.charAt(6)) + String.valueOf(tran.charAt(7)));
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("year", String.valueOf(bb));
                 Log.e("year", String.valueOf(cc));
                 drawItems.add(new DrawItem(dbManager.getDday(splites[i]), String.valueOf(caldate(aaa, bbb, ccc))));
-            }else if(tran.length()==7){
+            } else if (tran.length() == 7) {
                 String aa = String.valueOf(tran.charAt(0)) + String.valueOf(tran.charAt(1)) + String.valueOf(tran.charAt(2)) + String.valueOf(tran.charAt(3));
                 String bb = String.valueOf(String.valueOf(tran.charAt(4)));
                 String cc = String.valueOf(String.valueOf(tran.charAt(5)) + String.valueOf(tran.charAt(6)));
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("year", String.valueOf(bb));
                 Log.e("year", String.valueOf(cc));
                 drawItems.add(new DrawItem(dbManager.getDday(splites[i]), String.valueOf(caldate(aaa, bbb, ccc))));
-            }else if(tran.length()==6){
+            } else if (tran.length() == 6) {
                 String aa = String.valueOf(tran.charAt(0)) + String.valueOf(tran.charAt(1)) + String.valueOf(tran.charAt(2)) + String.valueOf(tran.charAt(3));
                 String bb = String.valueOf(String.valueOf(tran.charAt(4)));
                 String cc = String.valueOf(String.valueOf(tran.charAt(5)));
@@ -277,28 +277,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Date date = new Date(now);
         SimpleDateFormat sdfNow = new SimpleDateFormat("yyyyMMdd");
         String strNow = sdfNow.format(date);
-        Log.e("asd",strNow);
+        Log.e("asd", strNow);
     }
-    private int caldate(int year,int month,int day){
+
+    private int caldate(int year, int month, int day) {
         try {
             Calendar today = Calendar.getInstance(); //현재 오늘 날짜
             Calendar dday = Calendar.getInstance();
 
 
-            dday.set(year,month-1,day);// D-day의 날짜를 입력합니다.
+            dday.set(year, month - 1, day);// D-day의 날짜를 입력합니다.
 
 
-            long mday = dday.getTimeInMillis()/86400000;
+            long mday = dday.getTimeInMillis() / 86400000;
             // 각각 날의 시간 값을 얻어온 다음
             //( 1일의 값(86400000 = 24시간 * 60분 * 60초 * 1000(1초값) ) )
 
 
-            long tday = today.getTimeInMillis()/86400000;
+            long tday = today.getTimeInMillis() / 86400000;
             long count = tday - mday; // 오늘 날짜에서 dday 날짜를 빼주게 됩니다.
-            return (int) count+1; // 날짜는 하루 + 시켜줘야합니다.
-        }
-        catch (Exception e)
-        {
+            return (int) count + 1; // 날짜는 하루 + 시켜줘야합니다.
+        } catch (Exception e) {
             e.printStackTrace();
             return -1;
         }

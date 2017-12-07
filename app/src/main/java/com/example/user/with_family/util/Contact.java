@@ -28,4 +28,18 @@ public class Contact {
     public static String Matching = "matching";
     public static String SetProfilePhoto= "profile_photo";
 
+
+
+    public static final String[] PERMISSIONS = {
+            "android.permission.INTERNET",
+            "android.permission.ACCESS_NETWORK_STATE",
+            "android.permission.CHANGE_WIFI_STATE",
+            "android.permission.ACCESS_WIFI_STATE",
+            "android.permission.READ_PHONE_STATE",
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.READ_SMS",
+            "android.permission.READ_PHONE_NUMBERS"
+    };
+
 }

@@ -1,25 +1,20 @@
 package com.example.user.with_family;
 
-import android.Manifest;
-import android.content.Intent;
+import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.example.user.with_family.util.Contact;
 import com.example.user.with_family.util.UserDAO;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseDatabase databaseRef;
     DatabaseReference userinfoRef;                  // 유저 정보 가져오는 레퍼런스
 
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
     private TelephonyManager telephonyManager;
     private EditText id_edittext;
     private EditText pw_edittext;
@@ -39,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static List<UserDAO> userDAOList = new ArrayList<>();      // 유저 정보들 저장해놓을 리스트
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +52,11 @@ public class LoginActivity extends AppCompatActivity {
         pw_edittext = (EditText) findViewById(R.id.login_edit_pw_text);
         login_btn = (Button) findViewById(R.id.login_loginBtn);
         login_register = (Button) findViewById(R.id.login_register);
+        checkPermission(Contact.PERMISSIONS);
+
 
         // 외부저장소, 내부저장소 읽기 쓰기 권한 받아오기
-        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+        /*if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this, new String[]{
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             }, 466);
@@ -98,10 +97,10 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), telephonyManager.getLine1Number(), Toast.LENGTH_LONG).show();
 
                 }
-            });
+            });*/
 
             // 파이어베이스 유저데이터를 가져와서 저장하는 부분
-            userinfoRef.addValueEventListener(new ValueEventListener() {
+       /*     userinfoRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
@@ -162,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
 
 
@@ -173,7 +172,31 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkPermission(String[] permissions) {
 
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
+    }
+    // Application permission 23
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_STORAGE:
+                int cnt = permissions.length;
+                for(int i = 0; i < cnt; i++ ) {
+
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED ) {
+
+                        //Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
+
+                    } else {
+
+
+                    }
+                }
+                break;
+        }
+    }
 
 
 }
