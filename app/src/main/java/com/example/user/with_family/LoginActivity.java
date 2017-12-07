@@ -1,6 +1,7 @@
 package com.example.user.with_family;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -8,13 +9,18 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.user.with_family.util.Contact;
 import com.example.user.with_family.util.UserDAO;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +54,9 @@ public class LoginActivity extends AppCompatActivity {
         //data_allRef = database.getReference().child("register");
 
         telephonyManager = (TelephonyManager) getSystemService(getApplicationContext().TELEPHONY_SERVICE);      // 전화번호 가져오는 서비스
-        id_edittext = (EditText) findViewById(R.id.login_edit_id_text);
-        pw_edittext = (EditText) findViewById(R.id.login_edit_pw_text);
-        login_btn = (Button) findViewById(R.id.login_loginBtn);
-        login_register = (Button) findViewById(R.id.login_register);
-        checkPermission(Contact.PERMISSIONS);
 
+        checkPermission(Contact.PERMISSIONS);
+        init();
 
         // 외부저장소, 내부저장소 읽기 쓰기 권한 받아오기
         /*if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
@@ -99,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });*/
 
-            // 파이어베이스 유저데이터를 가져와서 저장하는 부분
+        // 파이어베이스 유저데이터를 가져와서 저장하는 부분
        /*     userinfoRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -164,12 +167,6 @@ public class LoginActivity extends AppCompatActivity {
         });*/
 
 
-
-
-
-
-
-
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -177,15 +174,16 @@ public class LoginActivity extends AppCompatActivity {
 
         requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
     }
+
     // Application permission 23
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSION_REQUEST_STORAGE:
                 int cnt = permissions.length;
-                for(int i = 0; i < cnt; i++ ) {
+                for (int i = 0; i < cnt; i++) {
 
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED ) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
 
                         //Log.i(LOG_TAG, "Permission[" + permissions[i] + "] = PERMISSION_GRANTED");
 
@@ -198,5 +196,99 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void init() {
+        id_edittext = (EditText) findViewById(R.id.login_edit_id_text);
+        pw_edittext = (EditText) findViewById(R.id.login_edit_pw_text);
+        login_btn = (Button) findViewById(R.id.login_loginBtn);
+        login_register = (Button) findViewById(R.id.login_register);
 
+        login_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (int i = 0; i < userDAOList.size(); i++) {
+
+                    if (userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
+                            userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())) {
+
+                        Toast.makeText(getApplicationContext(), "로그인 ON!!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.putString("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.commit();
+                        startActivity(intent);
+                        break;
+                    }
+                    // ID와 PW가 틀릴때
+                    else if (userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
+                            !userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())) {
+
+                        Toast.makeText(getApplicationContext(), "ID와 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    // ID가 존재하지않을때 -> 회원가입이 필요할때
+                    else {
+                        Toast.makeText(getApplicationContext(), "회원가입이 필요하신 ID입니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        userinfoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserDAO dao = snapshot.getValue(UserDAO.class);
+                    userDAOList.add(dao);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        // [미구현] 로그인 기능 - 아직 아이디 비번 체크 미구현
+        /*login_btn.OnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //만약 가져온 데이터중 지금 ID(핸드폰번호)와 비밀번호가 일치한다면 로그인 ok
+                for (int i = 0; i < userDAOList.size(); i++) {
+
+                    if (userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
+                            userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())) {
+
+                        Toast.makeText(getApplicationContext(), "로그인 ON!!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.putString("room_name", userDAOList.get(i).getRoom_name());
+                        sharededitor.commit();
+                        startActivity(intent);
+                        break;
+                    }
+                    // ID와 PW가 틀릴때
+                    else if (userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
+                            !userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())) {
+
+                        Toast.makeText(getApplicationContext(), "ID와 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    // ID가 존재하지않을때 -> 회원가입이 필요할때
+                    else {
+                        Toast.makeText(getApplicationContext(), "회원가입이 필요하신 ID입니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });*/
+        // 회원가입 액티비티로 넘어감
+        login_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 }
