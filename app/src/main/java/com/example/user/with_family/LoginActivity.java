@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button login_register;
 
     private static List<UserDAO> userDAOList = new ArrayList<>();      // 유저 정보들 저장해놓을 리스트
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +81,17 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     // sharedpreference에 전화번호 저장
-                   sharededitor.putString("myid", telephonyManager.getLine1Number());
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    sharededitor.putString("myid", telephonyManager.getLine1Number());
                     //sharededitor.commit();
 
                     //id_edittext.setText(telephonyManager.getLine1Number());
