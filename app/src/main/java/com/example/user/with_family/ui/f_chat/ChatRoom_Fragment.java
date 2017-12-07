@@ -68,7 +68,7 @@ public class ChatRoom_Fragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat,container,false);
-        chatroom_isnull = (TextView)view.findViewById(R.id.chatroom_isnull);
+        //chatroom_isnull = (TextView)view.findViewById(R.id.chatroom_isnull);
         chatRoom_recyclerView = (RecyclerView)view.findViewById(R.id.chatroom_recycleview);
         items = new ArrayList<ChatRoom_item>();
 

@@ -130,8 +130,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     aaa();
                 }*/
                 chat.child(roomName).push().setValue(item);
-                chat_room.child(Contact.MyName+","+getName).setValue(item);
-                chat_room.child(getName+","+Contact.MyName).setValue(item);
+                if(getName.equals(Contact.MyMainRoom)){
+                    chat_room.child(getName).setValue(item);
+                }else {
+                    chat_room.child(Contact.MyName + "," + getName).setValue(item);
+                    chat_room.child(getName + "," + Contact.MyName).setValue(item);
+                }
                 input.setText("");
                 adapter.notifyDataSetChanged();
                 chat_RecyclerView.getLayoutManager().scrollToPosition(chat_RecyclerView.getAdapter().getItemCount() - 1);

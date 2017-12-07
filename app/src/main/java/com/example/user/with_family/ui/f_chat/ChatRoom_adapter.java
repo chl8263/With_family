@@ -56,18 +56,35 @@ public class ChatRoom_adapter extends RecyclerView.Adapter<ChatRoom_adapter.View
         String roomName = Contact.MyName+","+items.get(position).getName();
         String roomName2 = items.get(position).getName()+","+Contact.MyName;
         Log.e("asdadsadsdas",items.get(position).getName()+","+Contact.MyName);
-        chatroom.child(items.get(position).getName()+","+Contact.MyName).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Chat_item chat_item = dataSnapshot.getValue(Chat_item.class);
-                callback.refresh(chat_item,position);
-            }
+        if(items.get(position).getName().equals(Contact.MyMainRoom)){
+            chatroom.child(items.get(position).getName()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Chat_item chat_item = dataSnapshot.getValue(Chat_item.class);
+                    callback.refresh(chat_item,position);
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }else {
+            chatroom.child(items.get(position).getName()+","+Contact.MyName).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Chat_item chat_item = dataSnapshot.getValue(Chat_item.class);
+                    callback.refresh(chat_item,position);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
     }
 
     @Override
