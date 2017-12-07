@@ -57,7 +57,8 @@ public class RegisterActivity extends Activity {
 
                 Map<String, Object> dataValues = new HashMap<>();
 
-                dataValues.put("id", id_editText.getHint().toString());
+                //dataValues.put("id", id_editText.getHint().toString());
+                dataValues.put("id", id_editText.getText().toString());
                 dataValues.put("pw", pw_editText.getText().toString());
                 dataValues.put("name", name_editText.getText().toString());
                 dataValues.put("bir", birday_editText.getText().toString());
@@ -72,7 +73,8 @@ public class RegisterActivity extends Activity {
                 dataValues.put("temp_room", "null");
 
 
-                DatabaseReference dr = data_allRef.child("user").child(id_editText.getHint().toString());
+                //DatabaseReference dr = data_allRef.child("user").child(id_editText.getHint().toString());
+                DatabaseReference dr = data_allRef.child("user").child(id_editText.getText().toString());
                 dr.setValue(dataValues);
 
 
