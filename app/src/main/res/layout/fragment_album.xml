@@ -12,7 +12,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/home_frameLayout">
+        android:id="@+id/home_frameLayout"
+        android:background="#FFFFFF">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,13 +25,15 @@
                 android:id="@+id/first_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="날짜"
-                android:textAlignment="center"/>
+                android:text="가족 앨범"
+                android:textSize="25dp"
+                android:textAlignment="center"
+                android:background="#FFEBFE"/>
 
         <!-- TODO: Update blank fragment layout -->
         <android.support.v7.widget.RecyclerView
             app:layoutManager="StaggeredGridLayoutManager"
-            app:spanCount="3"
+            app:spanCount="4"
             android:id="@+id/album_recycleview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
