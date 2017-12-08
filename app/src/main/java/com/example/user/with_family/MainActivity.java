@@ -70,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference myMainRoom = firebaseDatabase.getReference("register").child("r_room").child("룸");
     private DatabaseReference room_users = myMainRoom.child("user_tree");
-    private DatabaseReference chat_room = myMainRoom.child("chat_room");
-    private DatabaseReference chat = myMainRoom.child("chat");
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
