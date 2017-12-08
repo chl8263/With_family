@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText pw_edittext;
     private Button login_btn;
     private Button login_register;
+    private Intent intent;
 
     private static List<UserDAO> userDAOList = new ArrayList<>();      // 유저 정보들 저장해놓을 리스트
 
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
 
         requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
     }
+
 
     // Application permission 23
     @Override
@@ -122,12 +124,14 @@ public class LoginActivity extends AppCompatActivity {
                             userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())) {
 
                         Toast.makeText(getApplicationContext(), "로그인 ON!!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("room_name", userDAOList.get(i).getRoom_name());
                         sharededitor.putString("myid", userDAOList.get(i).getId());
                         sharededitor.putString("room_name", userDAOList.get(i).getRoom_name());
                         sharededitor.commit();
                         startActivity(intent);
+                        finish();
+
                         break;
                     }
                     // ID와 PW가 틀릴때

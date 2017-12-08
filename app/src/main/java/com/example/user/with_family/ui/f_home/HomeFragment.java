@@ -16,14 +16,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.user.with_family.R;
 import com.example.user.with_family.util.Contact;
 import com.example.user.with_family.util.Contacts;
 import com.example.user.with_family.util.UserDAO;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +46,10 @@ import java.util.Map;
  */
 
 public class HomeFragment extends Fragment {
+
+    private ImageView myImg;
+    private TextView myname;
+    private TextView mystats;
 
     public static Handler mhandler;
     public Bundle bundle;
@@ -72,7 +79,6 @@ public class HomeFragment extends Fragment {
 
 
     public HomeFragment(){
-
         databaseRef = FirebaseDatabase.getInstance();
         roominfoRef = databaseRef.getReference().child("register").child("r_room");         // 해당 방에 있는 사용자들을 가져오는 레퍼런스
         userinfoRef2 = databaseRef.getReference().child("register").child("user");          // 모든 사용자들을 가져오는 레퍼런스
@@ -98,6 +104,11 @@ public class HomeFragment extends Fragment {
         user_recyclerView = (RecyclerView)view.findViewById(R.id.main_joinstate_recycleview);
         home_relativelayout = (RelativeLayout)view.findViewById(R.id.home_relativeLayout);
         home_framelayout = (FrameLayout)view.findViewById(R.id.home_frameLayout);
+
+        myImg = (ImageView)view.findViewById(R.id.home_user_img);
+        myname = (TextView)view.findViewById(R.id.home_user_name);
+        mystats = (TextView)view.findViewById(R.id.home_user_stat);
+
         return view;
     }
 
@@ -262,52 +273,6 @@ public class HomeFragment extends Fragment {
 
 
 
-        /*// 모든사용자 저장하는곳
-        userinfoRef2.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                CurrentListRemove(userDAOList);
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    UserDAO dao2 = snapshot.getValue(UserDAO.class);
-                    userDAOList.add(dao2);
-                    main_joinstateAdapter.notifyDataSetChanged();
-                    System.out.println("데이터 변경 있음 2");
-                }
-                write();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
-        /*// 방에 있는 사람들 목록 저장하는곳
-        roominfoRef.child(dao.getRoom_name()).child("user_tree").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                CurrentListRemove(room_userDAOList);
-                room_userDAOList.add(dao.getId());
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    String user = snapshot.getKey().toString();
-                    System.out.println("무슨 값이니" + user);
-                    System.out.println("데이터 변경 있음 3");
-                    if(!user.equals(dao.getId())){
-                        room_userDAOList.add(user);
-                    }
-                }
-                //write();
-                main_joinstateAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
-
 
         floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.room_add_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -326,8 +291,11 @@ public class HomeFragment extends Fragment {
         removed();
         for(int i=0; i<room_userDAOList.size(); i++){
             if(i==0){
-                main_joinstateAdapter.addItem(new Contacts(mStorageReference.toString(), R.drawable.day_background, dao.getName(), dao.getNick(), dao.getId())); // 이미지 url, 이름 name
-                main_joinstateAdapter.notifyDataSetChanged();
+                Glide.with(getContext()).using(new FirebaseImageLoader()).load(mStorageReference).into(myImg);
+                myname.setText(dao.getName());
+                mystats.setText(dao.getNick());
+                //main_joinstateAdapter.addItem(new Contacts(mStorageReference.toString(), R.drawable.day_background, dao.getName(), dao.getNick(), dao.getId())); // 이미지 url, 이름 name
+                //main_joinstateAdapter.notifyDataSetChanged();
             }
             else {
                 System.out.println("사이즈 1 : " + room_userDAOList.size());
