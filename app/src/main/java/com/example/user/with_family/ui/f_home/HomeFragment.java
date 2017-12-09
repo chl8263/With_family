@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,7 @@ public class HomeFragment extends Fragment {
     private Button room_create_btn;
     private FloatingActionButton floatingActionButton;
     private RecyclerView user_recyclerView ;
+    private LinearLayout my_layoutView;
     private String login_user;
     private String room;
     private String user_room_name;
@@ -102,12 +104,30 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
         user_recyclerView = (RecyclerView)view.findViewById(R.id.main_joinstate_recycleview);
+        my_layoutView = (LinearLayout)view.findViewById(R.id.home_my_layout);
         home_relativelayout = (RelativeLayout)view.findViewById(R.id.home_relativeLayout);
         home_framelayout = (FrameLayout)view.findViewById(R.id.home_frameLayout);
+
 
         myImg = (ImageView)view.findViewById(R.id.home_user_img);
         myname = (TextView)view.findViewById(R.id.home_user_name);
         mystats = (TextView)view.findViewById(R.id.home_user_stat);
+
+        my_layoutView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // 프로필 눌렀을시 나오는 화면 구현
+                Intent myintent = new Intent(getContext(), UserInfoActivity.class);
+                myintent.putExtra("id", dao.getId());
+                myintent.putExtra("userurl", dao.getUserimg());
+                myintent.putExtra("username", dao.getName());
+                //myintent.putExtra("userstats", dao.getSarrayList.get(position).getStats());
+                myintent.putExtra("userbackurl", R.drawable.family);
+                myintent.putExtra("userid", dao.getId());
+                startActivityForResult(myintent, request_code);
+            }
+        });
 
         return view;
     }
@@ -188,6 +208,7 @@ public class HomeFragment extends Fragment {
                 }catch (NullPointerException e){
                     e.printStackTrace();
                 }
+                refreshMyip(dao);
 
                 System.out.println("데이터 변경 있음 1");
                 // 사용자가 속한 방이없다면, 있다면 원래대로 데이터를 불러와 띄움
@@ -306,7 +327,7 @@ public class HomeFragment extends Fragment {
                     System.out.println("all 리스트 : " + userDAOList.get(j).getId().toString());
 
                     if(room_userDAOList.get(i).toString().equals(userDAOList.get(j).getId().toString())){
-                        main_joinstateAdapter.addItem(new Contacts(userDAOList.get(j).getUserimg(), R.drawable.day_background, userDAOList.get(j).getName(), userDAOList.get(j).getNick(), userDAOList.get(j).getId())); // 이미지 url, 이름 name
+                        main_joinstateAdapter.addItem(new Contacts(userDAOList.get(j).getUserimg(), R.drawable.family, userDAOList.get(j).getName(), userDAOList.get(j).getNick(), userDAOList.get(j).getId())); // 이미지 url, 이름 name
                         main_joinstateAdapter.notifyDataSetChanged();
                     }
                 }
@@ -327,6 +348,16 @@ public class HomeFragment extends Fragment {
             dataValues.put("nick", userDAO.getNick());
             dataValues.put("userimg", userDAO.getUserimg());
 
+            dataValues.put("ip", Contact.MyIp);
+            dataValues.put("mainsendport", userDAO.getMainsendport());
+            dataValues.put("mainrecvport", userDAO.getMainrecvport());
+            dataValues.put("soundsendport", userDAO.getSoundsendport());
+            dataValues.put("soundrecvport", userDAO.getSoundrecvport());
+
+
+            addip(userDAO, room_name);
+            addImg(userDAO, room_name);
+
             DatabaseReference dr = roominfoRef.child(room_name).child("user_tree").child(userDAO.getId());
             dr.setValue(dataValues);
         }
@@ -341,10 +372,19 @@ public class HomeFragment extends Fragment {
         dataValues2.put("bir", userDAO.getBir());
         dataValues2.put("nick", userDAO.getNick());
 
+        dataValues2.put("ip", Contact.MyIp);
+        dataValues2.put("mainsendport", userDAO.getMainsendport());
+        dataValues2.put("mainrecvport", userDAO.getMainrecvport());
+        dataValues2.put("soundsendport", userDAO.getSoundsendport());
+        dataValues2.put("soundrecvport", userDAO.getSoundrecvport());
+
         dataValues2.put("friend1", "null");
         dataValues2.put("friend2", "null");
         dataValues2.put("friend3", "null");
         dataValues2.put("friend4", "null");
+
+
+
         // 자기가 방을 생성할 때
         if(index==0){
             dataValues2.put("userimg", userDAO.getUserimg());
@@ -382,6 +422,28 @@ public class HomeFragment extends Fragment {
         dr2.setValue(dataValues2);
     }
 
+    public void addip(UserDAO userDAO, String room_name){
+        Map<String, Object> dataValues = new HashMap<>();
+
+        dataValues.put("ip", Contact.MyIp);
+        dataValues.put("mainsendport", userDAO.getMainsendport());
+        dataValues.put("mainrecvport", userDAO.getMainrecvport());
+        dataValues.put("soundsendport", userDAO.getSoundsendport());
+        dataValues.put("soundrecvport", userDAO.getSoundrecvport());
+
+        DatabaseReference dr = roominfoRef.child(room_name).child("ip_tree").child(userDAO.getName());
+        dr.setValue(dataValues);
+    }
+
+    public void addImg(UserDAO userDAO, String room_name){
+        Map<String, Object> dataValues = new HashMap<>();
+
+        dataValues.put("userimg", userDAO.getUserimg());
+
+        DatabaseReference dr = roominfoRef.child(room_name).child("userimg_tree").child(userDAO.getName());
+        dr.setValue(dataValues);
+    }
+
     public void removed(){
         main_joinstateAdapter.removeItem();
     }
@@ -414,6 +476,25 @@ public class HomeFragment extends Fragment {
 
             }
         });
+    }
+
+    public void refreshMyip(UserDAO userDAO){
+
+        try {
+            Map<String, Object> dataValues = new HashMap<>();
+
+            dataValues.put("ip", Contact.MyIp);
+            dataValues.put("mainsendport", userDAO.getMainsendport());
+            dataValues.put("mainrecvport", userDAO.getMainrecvport());
+            dataValues.put("soundsendport", userDAO.getSoundsendport());
+            dataValues.put("soundrecvport", userDAO.getSoundrecvport());
+
+            DatabaseReference dr = roominfoRef.child(userDAO.getRoom_name()).child("ip_tree").child(userDAO.getName());
+            dr.setValue(dataValues);
+        }
+        catch (Exception e){
+            System.out.println("리프레쉬 오류 : ");
+        }
     }
 
 }

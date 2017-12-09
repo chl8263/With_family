@@ -57,19 +57,12 @@ public class Main_JoinStateAdapter extends RecyclerView.Adapter<Main_JoinStateAd
         // 뷰홀더 -> UI(?)부분에 해당되는 것들을 뷰에 미리 붙여서 고정
         public UnknownViewHolder(View itemView){
             super(itemView);
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);  // -> 바로 아래 onClick기능
             userImg = (ImageView)itemView.findViewById(R.id.user_img);
 
             username = (TextView)itemView.findViewById(R.id.user_name);
             userstats = (TextView)itemView.findViewById(R.id.user_stat);
 
-            username.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   /* Intent intent = new Intent(context, ChatActivity.class);
-                    context.startActivity(intent);*/
-                }
-            });
         }
 
         @Override

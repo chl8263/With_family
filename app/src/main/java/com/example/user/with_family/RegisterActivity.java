@@ -1,6 +1,7 @@
 package com.example.user.with_family;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -8,9 +9,13 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +23,6 @@ public class RegisterActivity extends Activity {
 
     FirebaseDatabase database;
     DatabaseReference data_allRef ;
-
 
     SharedPreferences sharedPreferences;
     private EditText id_editText;
@@ -29,12 +33,22 @@ public class RegisterActivity extends Activity {
     private Button register_ok_btn;
     private Button register_return_btn;
 
+    private Intent intent;
+    private String myip;
+
+    private int count = 0;
+
+    private ArrayList<String> templist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_register);
+
+        intent = getIntent();
+        myip = intent.getStringExtra("myip");
+
 
         database = FirebaseDatabase.getInstance();
         data_allRef = database.getReference().child("register");
@@ -72,6 +86,15 @@ public class RegisterActivity extends Activity {
                 dataValues.put("check", "null");
                 dataValues.put("temp_room", "null");
 
+                dataValues.put("ip", myip);
+                dataValues.put("mainsendport", Integer.toString(9000+count));
+                temp(9000+count++);
+                dataValues.put("mainrecvport", Integer.toString(9000+count));
+                temp(9000+count++);
+                dataValues.put("soundsendport", Integer.toString(9000+count));
+                temp(9000+count++);
+                dataValues.put("soundrecvport", Integer.toString(9000+count));
+                temp(9000+count++);
 
                 //DatabaseReference dr = data_allRef.child("user").child(id_editText.getHint().toString());
                 DatabaseReference dr = data_allRef.child("user").child(id_editText.getText().toString());
@@ -95,5 +118,41 @@ public class RegisterActivity extends Activity {
             }
         });
 
+        data_allRef.child("temp").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String temp = snapshot.getKey();
+                    templist.add(temp);
+                }
+                System.out.println("사이즈 : " + templist.size());
+                for(int i=0; i<templist.size(); i++){
+                    System.out.println(i + "번째 : " + templist.get(i).toString());
+                }
+                count = templist.size();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
+
+    public void temp(int count){
+        Map<String, Object> dataValues = new HashMap<>();
+
+        dataValues.put("temp", "null");
+
+        DatabaseReference dr = data_allRef.child("temp").child(Integer.toString(count));
+        dr.setValue(dataValues);
+
+    }
+
+
+
+
 }

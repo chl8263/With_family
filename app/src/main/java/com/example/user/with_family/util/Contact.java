@@ -5,6 +5,7 @@ package com.example.user.with_family.util;
  */
 
 public class Contact {
+    public static String MyIp;
     public static String MyMainRoom;
     public static String MyName;
     public static String Real_Finish = "Real_Finish";

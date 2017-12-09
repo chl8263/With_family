@@ -19,6 +19,11 @@ public class UserDAO {
     private String check;
     private String temp_room;
     private String invite_id;
+    private String ip;
+    private String mainsendport;
+    private String mainrecvport;
+    private String soundsendport;
+    private String soundrecvport;
 
 
 
@@ -26,7 +31,8 @@ public class UserDAO {
 
     }
 
-    public UserDAO(String id, String pw, String bir, String name, String nick, String friend1, String friend2, String friend3, String friend4, String userimg, String room_name){
+    public UserDAO(String id, String pw, String bir, String name, String nick, String friend1, String friend2, String friend3, String friend4,
+                   String userimg, String room_name, String ip, String mainsendport, String mainrecvport, String soundsendport, String soundrecvport){
         this.id = id;
         this.pw = pw;
         this.bir = bir;
@@ -38,6 +44,52 @@ public class UserDAO {
         this.friend4 = friend4;
         this.userimg = userimg;
         this.room_name = room_name;
+        this.ip = ip;
+        this.mainsendport = mainsendport;
+        this.mainrecvport = mainrecvport;
+        this.soundsendport = soundsendport;
+        this.soundrecvport = soundrecvport;
+    }
+
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getMainsendport() {
+        return mainsendport;
+    }
+
+    public void setMainsendport(String mainsendport) {
+        this.mainsendport = mainsendport;
+    }
+
+    public String getMainrecvport() {
+        return mainrecvport;
+    }
+
+    public void setMainrecvport(String mainrecvport) {
+        this.mainrecvport = mainrecvport;
+    }
+
+    public String getSoundsendport() {
+        return soundsendport;
+    }
+
+    public void setSoundsendport(String soundsendport) {
+        this.soundsendport = soundsendport;
+    }
+
+    public String getSoundrecvport() {
+        return soundrecvport;
+    }
+
+    public void setSoundrecvport(String soundrecvport) {
+        this.soundrecvport = soundrecvport;
     }
 
     public String getInvite_id() {

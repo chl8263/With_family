@@ -1,9 +1,13 @@
 package com.example.user.with_family;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -40,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button login_register;
     private Intent intent;
 
+    private String myip;
+
     private static List<UserDAO> userDAOList = new ArrayList<>();      // 유저 정보들 저장해놓을 리스트
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -47,6 +53,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        getip(); // 아이피 가져오는 부분
+        System.out.println("내 아이피 : " + myip);
+        Contact.MyIp = myip;
+
 
         sharedPreferences = getSharedPreferences("user_id", MODE_PRIVATE);
         sharededitor = sharedPreferences.edit();
@@ -103,7 +114,6 @@ public class LoginActivity extends AppCompatActivity {
                     userDAOList.add(dao);
 
                 }
-
             }
 
             @Override
@@ -157,8 +167,26 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                intent.putExtra("myip", myip);
                 startActivity(intent);
             }
         });
     }
+
+    public void getip(){
+
+        ConnectivityManager manager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean wificon = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+        if (wificon == false) {
+            return;  // 연결이 됬는지 확인
+        }
+        WifiManager wifimanager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        DhcpInfo dhcpInfo = wifimanager.getDhcpInfo();
+        int wIp = dhcpInfo.ipAddress;
+        myip = String.format("%d.%d.%d.%d", (wIp & 0xff), (wIp >> 8 & 0xff), (wIp >> 16 & 0xff), (wIp >> 24 & 0xff));
+        Toast.makeText(getApplicationContext(),myip,Toast.LENGTH_SHORT).show();
+
+    }
+
 }

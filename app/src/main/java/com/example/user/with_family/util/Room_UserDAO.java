@@ -11,20 +11,73 @@ public class Room_UserDAO {
     private String name;
     private String nick;
     private String userimg;
+    private String ip;
+    private String mainsendport;
+    private String mainrecvport;
+    private String soundsendport;
+    private String soundrecvport;
 
 
     public Room_UserDAO(){
 
     }
 
-    public Room_UserDAO(String id, String pw, String bir, String name, String nick, String userimg){
+    public Room_UserDAO(String id, String pw, String bir, String name, String nick, String userimg, String ip, String mainsendport, String mainrecvport, String soundsendport, String soundrecvport){
         this.id = id;
         this.pw = pw;
         this.bir = bir;
         this.name = name;
         this.nick = nick;
         this.userimg = userimg;
+        this.ip = ip;
+        this.mainsendport = mainsendport;
+        this.mainrecvport = mainrecvport;
+        this.soundsendport = soundsendport;
+        this.soundrecvport = soundrecvport;
+
+
     }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getMainsendport() {
+        return mainsendport;
+    }
+
+    public void setMainsendport(String mainsendport) {
+        this.mainsendport = mainsendport;
+    }
+
+    public String getMainrecvport() {
+        return mainrecvport;
+    }
+
+    public void setMainrecvport(String mainrecvport) {
+        this.mainrecvport = mainrecvport;
+    }
+
+    public String getSoundsendport() {
+        return soundsendport;
+    }
+
+    public void setSoundsendport(String soundsendport) {
+        this.soundsendport = soundsendport;
+    }
+
+    public String getSoundrecvport() {
+        return soundrecvport;
+    }
+
+    public void setSoundrecvport(String soundrecvport) {
+        this.soundrecvport = soundrecvport;
+    }
+
     public String getUserimg() {
         return userimg;
     }

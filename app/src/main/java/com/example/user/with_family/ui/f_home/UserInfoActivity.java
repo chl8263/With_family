@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.user.with_family.R;
+import com.example.user.with_family.util.Contact;
 import com.example.user.with_family.util.UserDAO;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,7 +38,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;            // 저장된 현재 접속자 정보
     FirebaseDatabase databaseRef;
-    DatabaseReference userinfoRef;                  // 접속 유저 정보 가져오는 레퍼런스
+    DatabaseReference userinfoRef;                  // 접속 유저 정보 가져오는 레퍼런스 - 유저 개인 이미지 갱신용
+    DatabaseReference roominfoRef;                  // 접속 유저 정보 가져오는 레퍼런스 - 방 유저 이미지 갱신용
 
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mStorageReference;
@@ -71,6 +73,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
         databaseRef = FirebaseDatabase.getInstance();
         userinfoRef = databaseRef.getReference().child("register").child("user");
+        roominfoRef = databaseRef.getReference().child("register").child("r_room");         // 해당 방에 있는 사용자들을 가져오는 레퍼런스
+
         sharedPreferences = getSharedPreferences("user_id", MODE_PRIVATE);
         login_user = sharedPreferences.getString("myid", "01012345678");
 
@@ -96,7 +100,9 @@ public class UserInfoActivity extends AppCompatActivity {
         user_name = intent.getStringExtra("username");
         user_stats = intent.getStringExtra("userstats");
         user_id = intent.getStringExtra("userid");
-        user_position = intent.getIntExtra("position", 0);
+        user_position = intent.getIntExtra("position", 999);
+
+
 
         mFirebaseStorage = FirebaseStorage.getInstance();
         mStorageReference = mFirebaseStorage.getReferenceFromUrl(user_img_url);
@@ -144,6 +150,9 @@ public class UserInfoActivity extends AppCompatActivity {
 
         // 유저 편집 버튼
         user_info_editview = (ImageView)findViewById(R.id.user_info_edit);
+        if(user_position!=999){
+            user_info_editview.setVisibility(View.INVISIBLE);
+        }
         user_info_editview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -205,6 +214,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     msg.setData(bundle);
                     HomeFragment.mhandler.sendMessage(msg);
 
+
                     finish();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -235,8 +245,25 @@ public class UserInfoActivity extends AppCompatActivity {
         dataValues.put("temp_room", currentDAO.getTemp_room());
         dataValues.put("invite_id", currentDAO.getInvite_id());
 
+        dataValues.put("ip", Contact.MyIp);
+        dataValues.put("mainsendport", currentDAO.getMainsendport());
+        dataValues.put("mainrecvport", currentDAO.getMainrecvport());
+        dataValues.put("soundsendport", currentDAO.getSoundsendport());
+        dataValues.put("soundrecvport", currentDAO.getSoundrecvport());
+
+        refreshuserImg(currentDAO, url);
+
         //Ref2는 없어도 됨
         DatabaseReference dr = userinfoRef.child(dao.getId());
+        dr.setValue(dataValues);
+    }
+
+    public void refreshuserImg(UserDAO currentDAO, String url){
+        Map<String, Object> dataValues = new HashMap<>();
+
+        dataValues.put("userimg", currentDAO.getUserimg());
+
+        DatabaseReference dr = roominfoRef.child(currentDAO.getRoom_name()).child("userimg_tree").child(currentDAO.getName());
         dr.setValue(dataValues);
     }
 
