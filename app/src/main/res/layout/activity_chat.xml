@@ -5,7 +5,12 @@
     android:layout_height="match_parent"
     android:background="@color/color_Lite_Gray"
     android:orientation="vertical">
-
+    <View
+        android:id="@+id/fabBGLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorTransBg"
+        android:visibility="gone" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,8 +25,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/color_Lite_Gray"
+            android:layout_height="60dp"
+            android:background="@color/color_Lite2_Gray"
             android:orientation="horizontal"
             android:padding="10dp">
 
@@ -33,7 +38,7 @@
                     android:id="@+id/input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="52dp"
+                    android:layout_marginLeft="55dp"
                     android:layout_weight="2"
                     android:background="@color/color_White"
                     android:textColor="@color/color_Black"
@@ -45,12 +50,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/chat_button"
+                    android:layout_marginLeft="4dp"
                     android:text="전송"
                     android:textColor="@color/color_White" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
 
 
     <LinearLayout
@@ -103,7 +108,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            app:fabSize="mini" />
+            app:fabSize="mini"
+            app:srcCompat="@drawable/telephone"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -132,7 +139,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            app:fabSize="mini" />
+            app:fabSize="mini"
+            app:srcCompat="@drawable/video"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -145,9 +154,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
         android:clipToPadding="false"
         android:gravity="center_vertical"
         android:padding="@dimen/standard_6"
@@ -156,10 +162,14 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
+            android:padding="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:gravity="center_vertical"
-            app:fabSize="normal" />
+            app:fabSize="normal"
+            app:srcCompat="@drawable/add"
+
+            />
     </LinearLayout>
 </RelativeLayout>

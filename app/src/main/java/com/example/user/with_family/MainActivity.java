@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Intent intent = getIntent();
         user_room_name = intent.getStringExtra("room_name");
+
+
 
         sharedPreferences = getSharedPreferences("user_id", MODE_PRIVATE);
         login_user = sharedPreferences.getString("myid", "01012345678");

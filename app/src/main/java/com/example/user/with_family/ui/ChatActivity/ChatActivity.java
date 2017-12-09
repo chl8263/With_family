@@ -1,7 +1,6 @@
 package com.example.user.with_family.ui.ChatActivity;
 
 import android.animation.Animator;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,9 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.example.user.with_family.Interfaces.DdayListener;
 import com.example.user.with_family.R;
-import com.example.user.with_family.ui.f_chat.ChatRoom_Fragment;
 import com.example.user.with_family.util.Contact;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -52,7 +49,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout fabLayout1, fabLayout2, fabLayout3;
     private boolean isFABopen = false;
     private String roomName = "";
-    private int flag=0;
+    private int flag = 0;
+    private View fabBGLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,13 +67,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void checkRoom() {
-        if(getName.equals(Contact.MyMainRoom)){
-            roomName=Contact.MyMainRoom;
+        if (getName.equals(Contact.MyMainRoom)) {
+            roomName = Contact.MyMainRoom;
             if (flag == 0) {
                 aaa();
                 flag++;
             }
-        }else {
+        } else {
             chat.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -130,9 +129,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     aaa();
                 }*/
                 chat.child(roomName).push().setValue(item);
-                if(getName.equals(Contact.MyMainRoom)){
+                if (getName.equals(Contact.MyMainRoom)) {
                     chat_room.child(getName).setValue(item);
-                }else {
+                } else {
                     chat_room.child(Contact.MyName + "," + getName).setValue(item);
                     chat_room.child(getName + "," + Contact.MyName).setValue(item);
                 }
@@ -140,10 +139,17 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 adapter.notifyDataSetChanged();
                 chat_RecyclerView.getLayoutManager().scrollToPosition(chat_RecyclerView.getAdapter().getItemCount() - 1);
                 Intent intent = new Intent(Contact.refresh_chaatroom);
-                intent.putExtra("name",item.getName());
-                intent.putExtra("content",item.getContent());
-                intent.putExtra("time",item.getTime());
+                intent.putExtra("name", item.getName());
+                intent.putExtra("content", item.getContent());
+                intent.putExtra("time", item.getTime());
                 sendBroadcast(intent);
+                break;
+            case R.id.fab1:
+
+                break;
+            case R.id.fab2:
+                break;
+            case R.id.fab3:
                 break;
         }
     }
@@ -158,6 +164,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initFab() {
+        fabBGLayout=findViewById(R.id.fabBGLayout);
         fabLayout1 = (LinearLayout) findViewById(R.id.fabLayout1);
         fabLayout2 = (LinearLayout) findViewById(R.id.fabLayout2);
         fabLayout3 = (LinearLayout) findViewById(R.id.fabLayout3);
@@ -180,11 +187,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showFABMenu() {
         isFABopen = true;
+        fabBGLayout.setVisibility(View.VISIBLE);
         fabLayout1.setVisibility(View.VISIBLE);
         fabLayout2.setVisibility(View.VISIBLE);
         fabLayout3.setVisibility(View.VISIBLE);
 
-        fab.animate().rotationBy(180);
+        fab.animate().rotationBy(135);
         fabLayout1.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
         fabLayout2.animate().translationY(-getResources().getDimension(R.dimen.standard_100));
         fabLayout3.animate().translationY(-getResources().getDimension(R.dimen.standard_145));
@@ -192,8 +200,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void closeFABMenu() {
+        fabBGLayout.setVisibility(View.GONE);
         isFABopen = false;
-        fab.animate().rotationBy(-180);
+        fab.animate().rotationBy(-135);
         fabLayout1.animate().translationY(0);
         fabLayout2.animate().translationY(0);
         fabLayout3.animate().translationY(0).setListener(new Animator.AnimatorListener() {
@@ -223,7 +232,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-    private void aaa(){
+
+    private void aaa() {
         chat.child(roomName).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -233,7 +243,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("들어옴", "ㅅㅂ");
                 if (item.getContent() != null) {
                     Log.e("내용", item.getContent());
-                }else{
+                } else {
                     Log.e("내용", "null");
                 }
 
@@ -261,6 +271,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
     private void init() {
 
         Intent intent = getIntent();
