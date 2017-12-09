@@ -6,9 +6,15 @@ package com.example.user.with_family.util;
 
 public class Contact {
     public static String MyIp;
+    public static String MyMainsendPort;
+    public static String MyMainrecvPort;
+    public static String MySoundsendPort;
+    public static String MySoundrecvPort;
+
     public static String MyMainRoom;
     public static String MyName;
     public static String Real_Finish = "Real_Finish";
+    public static String voice_success = "voice_success";
     public static String SAVE_DB = "SAVE_DB";
     public static String viewpager_left = "viewpager_left";
     public static String viewpager_left_w = "viewpager_left_w";
@@ -28,12 +34,11 @@ public class Contact {
     public static int VIEWPAGER_MAX = 1000;
     public static int VIEWPAGER_CURRENT = 499;
 
-    public static String Matching = "matching";
-    public static String SetProfilePhoto= "profile_photo";
 
 
 
     public static final String[] PERMISSIONS = {
+            "android.permission.RECORD_AUDIO",
             "android.permission.INTERNET",
             "android.permission.ACCESS_NETWORK_STATE",
             "android.permission.CHANGE_WIFI_STATE",

@@ -34,6 +34,7 @@ public class ChatRoom_Fragment extends Fragment{
     private TextView chatroom_isnull;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference myMainRoom = firebaseDatabase.getReference("register").child("r_room").child("룸");
+    private DatabaseReference userimg_tree = firebaseDatabase.getReference("register").child("r_room").child("룸").child("userimg_tree");
     private DatabaseReference room_users = myMainRoom.child("user_tree");
     private DatabaseReference chat_room = myMainRoom.child("chat_room");
 
@@ -113,7 +114,7 @@ public class ChatRoom_Fragment extends Fragment{
                 Log.e("asd",Contact.MyName);
                 for(int i=0;i<b.size();i++){
                     if(!b.get(i).equals(Contact.MyName)){
-                        items.add(new ChatRoom_item(b.get(i),"aa","aa"));
+                        items.add(new ChatRoom_item(b.get(i),"",""));
                     }
                 }
                 chatRoom_adapter.notifyDataSetChanged();

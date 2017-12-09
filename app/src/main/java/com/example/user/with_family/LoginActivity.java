@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                         sharededitor.putString("myid", userDAOList.get(i).getId());
                         sharededitor.putString("room_name", userDAOList.get(i).getRoom_name());
                         sharededitor.commit();
+                        Contact.MyName = userDAOList.get(i).getName();
                         startActivity(intent);
                         finish();
 

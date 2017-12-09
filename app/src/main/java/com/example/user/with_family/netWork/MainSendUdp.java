@@ -13,12 +13,14 @@ import java.net.UnknownHostException;
  * Created by choi on 2017-12-09.
  */
 
-public class MiainSendUdp extends Thread {
-    //private String ip = Contact.ip_address;
-    private int portnumber = 9000;
+public class MainSendUdp extends Thread {
+    private String ip;
+    private int port;
     private String msg;
-    public MiainSendUdp(String msg){
+    public MainSendUdp(String msg, String ip,int port){
         this.msg = msg;
+        this.ip = ip;
+        this.port = port;
     }
     @Override
     public void run() {
@@ -32,8 +34,9 @@ public class MiainSendUdp extends Thread {
 
         try {
             Log.e("exit", "exit send");
-            //ServerAddress = InetAddress.getByName(ip);
-            packet = new DatagramPacket(protocalBytes, protocalBytes.length, ServerAddress, portnumber);
+            ServerAddress = InetAddress.getByName(ip);
+            Log.e("port", port+"");
+            packet = new DatagramPacket(protocalBytes, protocalBytes.length, ServerAddress, port);
             socket = new DatagramSocket();
             socket.send(packet);
             Log.e("exit", "exit dead");

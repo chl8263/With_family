@@ -109,13 +109,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             app:fabSize="mini"
-            app:srcCompat="@drawable/telephone"
+            app:srcCompat="@drawable/video"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="사진" />
+            android:text="영상채팅" />
     </LinearLayout>
 
     <LinearLayout
@@ -140,13 +140,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             app:fabSize="mini"
-            app:srcCompat="@drawable/video"
+            app:srcCompat="@drawable/telephone"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="음성" />
+            android:text="음성 채팅" />
 
     </LinearLayout>
 
@@ -163,11 +163,11 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:padding="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="bottom|end"
             android:gravity="center_vertical"
-            app:fabSize="normal"
+
             app:srcCompat="@drawable/add"
 
             />

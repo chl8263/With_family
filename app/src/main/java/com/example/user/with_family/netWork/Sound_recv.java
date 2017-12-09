@@ -22,11 +22,13 @@ public class Sound_recv extends Thread {
     private AudioTrack track;
     private DatagramSocket socket = null;
     private DatagramPacket packet = null;
-    byte[] data = new byte[3528 * 6 + 1500];
+    //byte[] data = new byte[3528 * 6 + 1500];
+    byte[] data = new byte[20000+2];
     private Boolean rere = true;
-    private int portnumber = 9001;
+    private int portnumber ;
 
-    public Sound_recv() {
+    public Sound_recv(int portnumber) {
+        this.portnumber = portnumber;
         Log.e("recev_create", "good");
         try {
             socket = new DatagramSocket(portnumber);

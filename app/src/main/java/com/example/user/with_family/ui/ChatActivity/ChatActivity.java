@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.user.with_family.R;
+import com.example.user.with_family.ui.Streaming.VoiceActivity;
 import com.example.user.with_family.util.Contact;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +38,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private EditText input;
     private Button submit;
     private String getName;
+    private String getRoomOther;
     private RecyclerView chat_RecyclerView;
     private ArrayList<Chat_item> items;
     private Chat_Adapter adapter;
@@ -62,6 +64,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         init();
         checkRoom();
         //aaa();
+        Intent intent = getIntent();
+        getRoomOther = intent.getStringExtra("room_name");
+
         Log.e("myname", Contact.MyName);
         Log.e("yourname", getName);
     }
@@ -150,6 +155,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.fab2:
                 break;
             case R.id.fab3:
+                Intent intent1 = new Intent(getApplicationContext(), VoiceActivity.class);
+                intent1.putExtra("other","SEND/"+getRoomOther+"/");
+                startActivity(intent1);
                 break;
         }
     }
@@ -182,6 +190,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+        fab1.setOnClickListener(this);
+        fab2.setOnClickListener(this);
+        fab3.setOnClickListener(this);
 
     }
 

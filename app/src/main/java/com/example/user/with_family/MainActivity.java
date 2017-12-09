@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.user.with_family.Interfaces.DdayListener;
 import com.example.user.with_family.db.DBManager;
+import com.example.user.with_family.netWork.MainServiceRecvUDP;
 import com.example.user.with_family.ui.drawlayout.DrawAdapter;
 import com.example.user.with_family.ui.drawlayout.DrawItem;
 import com.example.user.with_family.ui.f_album.Album_Fragment;
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sharededitor.commit();
 
         //initStatusbar();
+
         initChatRoom();
         init();
         setDrawerLayout();
@@ -101,6 +102,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
+    }
+    private void startService() {
+        Intent intent = new Intent(getApplicationContext(), MainServiceRecvUDP.class);
+        startService(intent);
     }
     private void initChatRoom(){
         room_users.addValueEventListener(new ValueEventListener() {
