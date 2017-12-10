@@ -60,8 +60,19 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
         registerReceiver(receiver, intentFilter);
 
         player = MediaPlayer.create(getApplicationContext(), R.raw.voice);
+        player.setLooping(true);
         player.start();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (player != null) {
+            player.stop();
+            player.release();
+        }
+    }
+
 
     @Override
     public void onDestroy() {
@@ -70,6 +81,10 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
         if (receiver != null) {
             unregisterReceiver(receiver);
             receiver = null;
+        }
+        if (player != null) {
+            player.stop();
+            player.release();
         }
 
     }
@@ -97,7 +112,7 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
                     SocketDAO socketDAO = dataSnapshot.getValue(SocketDAO.class);
                     Log.e("ipppppppp", socketDAO.getIp());
                     ip = socketDAO.getIp();
-                    main_recv_port =socketDAO.getMainrecvport();
+                    main_recv_port = socketDAO.getMainrecvport();
                     sound_send_port = socketDAO.getSoundrecvport();
 
                     MainSendUdp mainSendUdp = new MainSendUdp("c/" + Contact.MyName + "/", socketDAO.getIp(), Integer.parseInt(socketDAO.getMainrecvport()));
@@ -155,10 +170,16 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
                     status.setText("연결됨!");
                     flag = 0;
                     callstatus.setImageResource(R.drawable.voice_red);
+
                     sound_recv = new Sound_recv(Integer.parseInt(Contact.MySoundrecvPort));
                     sound_recv.start();
-                    sound_send = new Sound_send(ip,Integer.parseInt(sound_send_port));
+                    sound_send = new Sound_send(ip, Integer.parseInt(sound_send_port));
                     sound_send.start();
+
+                    if (player != null) {
+                        player.stop();
+                        player.release();
+                    }
                 }
                 break;
         }
@@ -170,9 +191,14 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
             if (intent.getAction().equals(Contact.voice_success)) {
                 status.setText("연결됨!");
 
+                if (player != null) {
+                        player.stop();
+                        player.release();
+                }
+
                 sound_recv = new Sound_recv(Integer.parseInt(Contact.MySoundrecvPort));
                 sound_recv.start();
-                sound_send = new Sound_send(ip,Integer.parseInt(sound_send_port));
+                sound_send = new Sound_send(ip, Integer.parseInt(sound_send_port));
                 sound_send.start();
             }
         }

@@ -34,11 +34,11 @@ public class Sound_send extends Thread {
         super.run();
         boolean mic = true;
         Log.e("보냄시작", "ㅇㅇ" + Thread.currentThread().getName());
-        AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, AudioSampleRate, AudioChannel, AudioBit, AudioRecord.getMinBufferSize(AudioSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT) * 10);
+        AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, AudioSampleRate, AudioChannel, AudioBit, AudioRecord.getMinBufferSize(AudioSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)*5);
         int bytes_read = 0;
         int bytes_sent = 0;
         //byte buffer[] = new byte[3528 * 5];
-        byte buffer[] = new byte[20000];
+        byte buffer[] = new byte[10000];
         try {
             Log.e("보냄성공!", "오짐");
             socket = new DatagramSocket();

@@ -23,7 +23,7 @@ public class Sound_recv extends Thread {
     private DatagramSocket socket = null;
     private DatagramPacket packet = null;
     //byte[] data = new byte[3528 * 6 + 1500];
-    byte[] data = new byte[20000+2];
+    byte[] data = new byte[10000];
     private Boolean rere = true;
     private int portnumber ;
 
