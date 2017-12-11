@@ -98,6 +98,7 @@ public class UserInfoActivity extends AppCompatActivity {
         user_img_url = intent.getStringExtra("userurl");
         user_backimg_url = intent.getIntExtra("userbackurl", 0);
         user_name = intent.getStringExtra("username");
+        System.out.println("유저인포 : " + user_name);
         user_stats = intent.getStringExtra("userstats");
         user_id = intent.getStringExtra("userid");
         user_position = intent.getIntExtra("position", 999);
@@ -142,11 +143,13 @@ public class UserInfoActivity extends AppCompatActivity {
 
         // 유저 이름
         user_name_textview = (TextView)findViewById(R.id.user_name_textview);
+        System.out.println("텍스트뷰 유저인포 : " + user_name);
         user_name_textview.setText(user_name);
 
         // 유저 상태 - 얘는 빼야 될 수도 있음
         user_stats_textview = (TextView)findViewById(R.id.user_stats_textview);
         user_stats_textview.setText(user_stats);
+        System.out.println("텍스트뷰 유저스텟 : " + user_stats);
 
         // 유저 편집 버튼
         user_info_editview = (ImageView)findViewById(R.id.user_info_edit);

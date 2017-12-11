@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.user.with_family.R;
 import com.example.user.with_family.util.AlbumDAO;
+import com.example.user.with_family.util.AlbumDAO2;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -45,11 +47,14 @@ import static android.app.Activity.RESULT_OK;
 
 public class Album_Fragment   extends Fragment {
 
+    private  int count=0;
+
     private SharedPreferences sharedPreferences;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference user_databaseReference;
     private DatabaseReference img_databaseReference;
+    private DatabaseReference temp_databaseReference;
 
     private FirebaseStorage firebaseStorage;
     private StorageReference mStorageReference ;
@@ -68,18 +73,22 @@ public class Album_Fragment   extends Fragment {
     private static final int GALLERY_INTENT = 2;
     private ProgressDialog mProgressDialog; // 사진이 저장되는 동안 프로그레스바를 띄워서 로딩중인걸 알게해줌
 
+    private int date_dao_count=0;
+    private int albumdaocount=0;
+
     private StaggeredGridLayoutManager mStgaggeredGridLayoutManager;
     private RecyclerView album_recyclerView;
     Album_Adapter album_adapter;
+    Album_Adapter2 album_adapter2;
 
-
-    private static List<String> date_DAOList = new ArrayList<>();     // 방에 들어가있는 날짜 목록
-    private static List<String> img_DAOList = new ArrayList<>();      // 방에 들어가있는 날짜에 속한 그림 목록
-    private static List<AlbumDAO> albumDAOList = new ArrayList<>();      // 방안의 앨범 이미지들 저장해놓을 리스트
+    private  List<AlbumDAO2> date_DAOList = new ArrayList<>();     // 방에 들어가있는 날짜 목록
+    private  List<String> img_DAOList = new ArrayList<>();      // 방에 들어가있는 날짜에 속한 그림 목록
+    public static List<AlbumDAO> albumDAOList = new ArrayList<>();      // 방안의 앨범 이미지들 저장해놓을 리스트
 
     public Album_Fragment(){
 
     }
+
     public static Album_Fragment newInstance() {
         Bundle args = new Bundle();
         Album_Fragment fragment = new Album_Fragment();
@@ -98,7 +107,7 @@ public class Album_Fragment   extends Fragment {
 
         user_databaseReference = firebaseDatabase.getReference().child("register").child("user");
         img_databaseReference = firebaseDatabase.getReference().child("register").child("r_room");
-
+        temp_databaseReference = firebaseDatabase.getReference().child("register").child("r_room");
 
     }
 
@@ -116,11 +125,11 @@ public class Album_Fragment   extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mStgaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        album_recyclerView.setLayoutManager(mStgaggeredGridLayoutManager);
+        mStgaggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        album_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        album_adapter = new Album_Adapter(getView().getContext());
-        album_recyclerView.setAdapter(album_adapter);
+        album_adapter2 = new Album_Adapter2(getView().getContext());
+        album_recyclerView.setAdapter(album_adapter2);
 
         // 현재 방 이름 가져오는 것
         sharedPreferences = this.getActivity().getSharedPreferences("user_id", Context.MODE_PRIVATE);
@@ -144,22 +153,38 @@ public class Album_Fragment   extends Fragment {
 
 
         // 방 안에 날짜 별로 리스트에 일단 저장
-        img_databaseReference = img_databaseReference.child(room_name).child("img_tree");
+        temp_databaseReference = temp_databaseReference.child(room_name).child("img_tree");
+        img_databaseReference = temp_databaseReference;
         img_databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                CurrentListRemove(albumDAOList);
+                //CurrentListRemove(img_DAOList);
+                //CurrentListRemove(albumDAOList);
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String load_date = snapshot.getKey().toString();
                     System.out.println("날짜 무슨 값이니 : " + load_date);
-                    date_DAOList.add(load_date);
-                    load_img(load_date);
+                    for(int i=0; i<date_DAOList.size(); i++){
+                        if (date_DAOList.get(i).getDate().equals(load_date)) {
+                            date_dao_count++;
+                        }
+                    }
+                    if(date_dao_count==0) {
+                        date_DAOList.add(new AlbumDAO2(load_date, room_name));
+                    }
+                    date_dao_count=0;
                 }
+                for(int i=0; i<date_DAOList.size(); i++){
+                    load_img(date_DAOList.get(i).getDate(), 1);
+                }
+
 
                 for(int i = 0; i<date_DAOList.size(); i++){
                     System.out.println("리스트 안의 들어간 날짜 : " + date_DAOList.get(i).toString());
                 }
 
+                //write();
+                //write();
+                //hide_date="";
             }
 
             @Override
@@ -210,12 +235,21 @@ public class Album_Fragment   extends Fragment {
             filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    /*removed();
+                    albumDAOList.clear();
+                    date_DAOList.clear();*/
+                    System.out.println("앨범사이즈 : "  + albumDAOList.size() + " 데이터 사이즈 : " + date_DAOList.size());
+
                     Toast.makeText(getContext(), "upload Done", Toast.LENGTH_LONG).show();
                     mProgressDialog.dismiss();
                     // 데이터베이스도 갱신(스토리지에 있는 유저img 경로)
                     //updateDao(dao, filepath.toString());
                     System.out.println("file" + filepath.toString());
+                    removed();
+                    albumDAOList.clear();
+                    date_DAOList.clear();
                     updateDao(imgDate, random_imgname);
+
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -230,6 +264,8 @@ public class Album_Fragment   extends Fragment {
 
     // 방 안에있는 img_tree안에 이미지 경로 저장
     public void updateDao(String date, String url){
+
+
         Map<String, Object> dataValues = new HashMap<>();
 
         dataValues.put("temp", url);
@@ -237,51 +273,35 @@ public class Album_Fragment   extends Fragment {
         System.out.println("파이어베이스에 들어갈 경로 : " + url);
 
         //Ref2는 없어도 됨
-        DatabaseReference dr = img_databaseReference.child(date).child(url);
+        DatabaseReference dr = img_databaseReference.child(url);
         dr.setValue(dataValues);
+
+     /*   removed();
+        albumDAOList.clear();
+        date_DAOList.clear();*/
+        hide_date = "999";
     }
 
-    // 해당 날짜에 속한 이미지 값들 리스트에 저장
-    public void load_img(String dates){
-        System.out.println("넘어온 dates : " + dates);
-        hide_date = dates;
-        System.out.println("템프데이트 : " + hide_date);
 
-        img_databaseReference.child(hide_date).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    //CurrentListRemove(albumDAOList);
-                    System.out.println("로드이미지 포문안2 : " + dataSnapshot.getKey().toString());
-                    String temp_date = dataSnapshot.getKey().toString(); // 현재 찾고있는 날짜
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String load_image = snapshot.getKey().toString();                   // 날짜에 속해있는 이미지들 키값 가져오는 부분임
-                        albumDAOList.add(new AlbumDAO(temp_date, room_name+"/"+temp_date+"/"+load_image));              // 앨범 DAO에 날짜와 이미지 값들 저장
-                    }
-                    for (int i = 0; i < albumDAOList.size(); i++) {
-                        System.out.println("리스트 안의 날짜 : " + albumDAOList.get(i).getDate());
-                        System.out.println("리스트 안의 이미지 : " + albumDAOList.get(i).getImg_ref());
-                    }
-                    write();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-    }
 
     public void write(){
-        removed();
-        for(int i=0; i<albumDAOList.size(); i++){
-                album_adapter.addItem(new AlbumDAO(albumDAOList.get(i).getDate(), albumDAOList.get(i).getImg_ref()));
-                album_adapter.notifyDataSetChanged();
+
+        if(count==date_DAOList.size()) {
+            removed();
+            for (int i = 0; i < date_DAOList.size(); i++) {
+                System.out.println("앨범사이즈 : " + date_DAOList.size());
+                album_adapter2.addItem(date_DAOList.get(i));
+                album_adapter2.notifyDataSetChanged();
+            }
+            count=0;
         }
+
+        System.out.println("프래그먼트에서의 크기 : " + albumDAOList.size());
     }
 
 
     public void removed(){
-        album_adapter.removeItem();
+        album_adapter2.removeItem();
     }
 
     // 현재 albumDAOList 초기화
@@ -291,4 +311,55 @@ public class Album_Fragment   extends Fragment {
             arrayList.remove(0);
         }
     }
+
+
+    // 해당 날짜에 속한 이미지 값들 리스트에 저장
+    public void load_img(String dates, int cnt) {
+
+        System.out.println("넘어온 dates : " + dates);
+        hide_date = dates;
+        System.out.println("템프데이트 : " + hide_date);
+        img_databaseReference = temp_databaseReference.child(hide_date);
+        img_databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //CurrentListRemove(albumDAOList);
+                if (!hide_date.equals("999")){
+                    System.out.println("로드이미지 포문안2 : " + dataSnapshot.getKey().toString() + "로드이미지 템프값 : " + hide_date);
+                String temp_date = dataSnapshot.getKey().toString(); // 현재 찾고있는 날짜
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String load_image = snapshot.getKey().toString();                   // 날짜에 속해있는 이미지들 키값 가져오는 부분임
+
+                    for(int k=0; k<albumDAOList.size(); k++){
+                        if(albumDAOList.get(k).getImg_ref().equals(room_name + "/" + temp_date + "/" + load_image)){
+                            albumdaocount++;
+                        }
+                    }
+                    if(albumdaocount==0){
+                        albumDAOList.add(new AlbumDAO(temp_date, room_name + "/" + temp_date + "/" + load_image));              // 앨범 DAO에 날짜와 이미지 값들 저장
+                    }
+                    albumdaocount=0;
+                    System.out.println("데이터 왜들어가 : " + albumDAOList.get(0).getDate());
+                }
+
+                for (int i = 0; i < albumDAOList.size(); i++) {
+                    System.out.println("리스트 안의 날짜 : " + albumDAOList.get(i).getDate());
+                    System.out.println("리스트 안의 이미지 : " + albumDAOList.get(i).getImg_ref());
+                }
+                count++;
+                write();
+
+            }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+
+        }
+
+
 }

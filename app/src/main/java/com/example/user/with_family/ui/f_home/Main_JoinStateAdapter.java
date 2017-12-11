@@ -76,6 +76,7 @@ public class Main_JoinStateAdapter extends RecyclerView.Adapter<Main_JoinStateAd
             intent.putExtra("position", position);
             intent.putExtra("userurl", arrayList.get(position).getUrl().toString());
             intent.putExtra("username", arrayList.get(position).getName());
+            System.out.println("뭐야 어댑터 네임 : " + arrayList.get(position).getName());
             intent.putExtra("userstats", arrayList.get(position).getStats());
             intent.putExtra("userbackurl", arrayList.get(position).getBackurl());
             intent.putExtra("userid", arrayList.get(position).getId());

@@ -9,7 +9,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp">
+        android:layout_height="350dp">
         <ImageView
             android:id="@+id/user_background_imgview"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="160dp"
         android:layout_gravity="bottom|center"
         >
 
@@ -40,11 +40,12 @@
 
 
         <TextView
+
             android:id="@+id/user_name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="UNKNOWN"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textSize="25dp"
             android:layout_centerInParent="true"
             android:layout_alignParentTop="true"
@@ -66,13 +67,13 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="250dp"
         android:layout_gravity="center">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_info_userimgview"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_horizontal|bottom"
             />
     </FrameLayout>
@@ -84,8 +85,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_info_edit"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:src="@drawable/user_edit"
             android:layout_gravity="center"/>
         <!--android:layout_gravity="center_horizontal"

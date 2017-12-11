@@ -16,7 +16,7 @@
             android:textSize="22sp"
             android:textColor="#fff"
             android:gravity="center"
-            android:background="#ff7a00"
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="53dp" />
     </LinearLayout>
@@ -186,22 +186,28 @@
             android:id="@+id/register_ok"
             android:text="확인"
             android:textSize="15sp"
-            android:textColor="#ff7a00"
+            android:textColor="#ffffff"
             android:padding="16dp"
             android:gravity="center"
-            android:background="#00000000"
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:layout_weight="1" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="53dp"
+            android:background="#f0f0d0"
+            />
 
         <Button
             android:id="@+id/register_return"
             android:text="초기화"
             android:textSize="15sp"
-            android:textColor="#ff7a00"
+            android:textColor="#ffffff"
             android:padding="16dp"
             android:gravity="center"
-            android:background="#00000000"
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:layout_weight="1" />
