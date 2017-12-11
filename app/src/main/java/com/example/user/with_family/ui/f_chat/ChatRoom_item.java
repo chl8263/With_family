@@ -8,10 +8,21 @@ public class ChatRoom_item {
     private String name;
     private String content;
     private String time;
-    public ChatRoom_item(String name, String content, String time) {
+    private String imgpath;
+
+    public ChatRoom_item(String name, String content, String time,String imgpath) {
         this.name = name;
         this.content = content;
         this.time = time;
+        this.imgpath = imgpath;
+    }
+
+    public String getImgpath() {
+        return imgpath;
+    }
+
+    public void setImgpath(String imgpath) {
+        this.imgpath = imgpath;
     }
 
     public String getName() {

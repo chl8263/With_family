@@ -155,7 +155,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.fab2:
                 Intent intent2 = new Intent(getApplicationContext(), VideoActivity.class);
-
+                intent2.putExtra("init","a");
                 intent2.putExtra("other","SEND/"+getRoomOther+"/");
                 startActivity(intent2);
                 break;

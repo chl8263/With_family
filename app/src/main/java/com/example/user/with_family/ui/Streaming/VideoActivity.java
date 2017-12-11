@@ -103,8 +103,8 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     private void init() {
-        video_status = (TextView)findViewById(R.id.video_status);
-        video_otherName = (TextView)findViewById(R.id.video_otherName);
+        video_status = (TextView) findViewById(R.id.video_status);
+        video_otherName = (TextView) findViewById(R.id.video_otherName);
         v_call_status = (ImageView) findViewById(R.id.v_call_status);
         v_call_status.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,7 +210,7 @@ public class VideoActivity extends AppCompatActivity {
                     player.stop();
                     player.release();
                 }
-            }else if (intent.getAction().equals(Contact.video_exit)) {
+            } else if (intent.getAction().equals(Contact.video_exit)) {
                 finish();
             }
         }
@@ -225,7 +225,15 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (player != null)
+            player.release();
+    }
+
+    @Override
     protected void onDestroy() {
+        super.onDestroy();
 
         // instance release
         if (playrtc != null) {
@@ -243,8 +251,7 @@ public class VideoActivity extends AppCompatActivity {
         }
 
         playrtcObserver = null;
-        android.os.Process.killProcess(android.os.Process.myPid());
-        super.onDestroy();
+        //android.os.Process.killProcess(android.os.Process.myPid());   //앱 자체를 아예 종료 시키는것
     }
 
     private void createPlayRTCObserverInstance() {

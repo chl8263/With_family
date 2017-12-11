@@ -4,13 +4,13 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
-        multiDexEnabled true
         applicationId "com.example.user.with_family"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,6 +25,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/libjingle_peerconnection_heads59r6.jar')
     compile files('libs/sktplayrtc-client.2.2.12.jar')
+    
     implementation 'com.google.firebase:firebase-database:11.0.4'
     implementation 'com.google.firebase:firebase-storage:11.0.4'
     implementation 'com.google.firebase:firebase-auth:11.0.4'

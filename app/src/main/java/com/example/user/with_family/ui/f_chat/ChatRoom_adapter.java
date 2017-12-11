@@ -16,12 +16,16 @@ import com.example.user.with_family.Interfaces.ChatRoom_Refresh_callback;
 import com.example.user.with_family.R;
 import com.example.user.with_family.ui.ChatActivity.ChatActivity;
 import com.example.user.with_family.ui.ChatActivity.Chat_item;
+import com.example.user.with_family.ui.Circleimage.Circle;
 import com.example.user.with_family.util.Contact;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,6 +42,8 @@ public class ChatRoom_adapter extends RecyclerView.Adapter<ChatRoom_adapter.View
     private DatabaseReference myMainRoom = firebaseDatabase.getReference("register").child("r_room").child("룸");
     private DatabaseReference roomimg = firebaseDatabase.getReference("register").child("r_room").child("룸").child("userimg_tree");
     private DatabaseReference chatroom = myMainRoom.child("chat_room");
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference reference;
     public ChatRoom_adapter(Context context, ArrayList<ChatRoom_item> items,ChatRoom_Refresh_callback callback) {
         this.context = context;
         this.items = items;
@@ -56,14 +62,32 @@ public class ChatRoom_adapter extends RecyclerView.Adapter<ChatRoom_adapter.View
         holder.chatroom_name.setText(items.get(position).getName());
         holder.chatroom_content.setText(items.get(position).getContent());
         holder.chatroom_time.setText(items.get(position).getTime());
-
+        //reference = storage.getReferenceFromUrl(items.get(position).getImgpath());
+        //Glide.with(context).using(new FirebaseImageLoader()).load(reference).into(holder.chat_room_img);
         roomimg.child(items.get(position).getName()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                /*String a = (String) dataSnapshot.child("userimg").getValue();*/
-                Log.e("aaaaa",dataSnapshot.child("userimg").toString());
-                if(dataSnapshot.child("userimg").getValue()!=null){
-                    Picasso.with(context).load(Uri.parse(String.valueOf(dataSnapshot.child("userimg")))).into(holder.chat_room_img);
+                String a = (String) dataSnapshot.child("userimg").getValue();
+//                Log.e("aaaaa",dataSnapshot.child("userimg").toString());
+                if(dataSnapshot.getValue()!=null){
+
+                    String uri  = dataSnapshot.child("userimg").getValue(String.class);
+                    Log.e("check",uri);
+                    reference = storage.getReferenceFromUrl(uri);
+                    reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String url = uri.toString();
+                            Picasso.with(context).load(url).transform(new Circle()).into((holder).chat_room_img);
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
                 }
 
             }

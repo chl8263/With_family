@@ -35,6 +35,8 @@ public class ChatRoom_Fragment extends Fragment{
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference myMainRoom = firebaseDatabase.getReference("register").child("r_room").child("룸");
     private DatabaseReference userimg_tree = firebaseDatabase.getReference("register").child("r_room").child("룸").child("userimg_tree");
+    private DatabaseReference roomimg = firebaseDatabase.getReference("register").child("r_room").child("룸").child("userimg_tree");
+    private DatabaseReference chatroom = myMainRoom.child("chat_room");
     private DatabaseReference room_users = myMainRoom.child("user_tree");
     private DatabaseReference chat_room = myMainRoom.child("chat_room");
 
@@ -112,9 +114,29 @@ public class ChatRoom_Fragment extends Fragment{
                 }
                 b.add(Contact.MyMainRoom);
                 Log.e("asd",Contact.MyName);
+                final String[] uri = {""};
                 for(int i=0;i<b.size();i++){
                     if(!b.get(i).equals(Contact.MyName)){
-                        items.add(new ChatRoom_item(b.get(i),"",""));
+                        /*roomimg.child(b.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.child("userimg").getValue()!=null){
+                                    uri[0] = dataSnapshot.getValue(String.class);
+                                    Log.e("checkss", uri[0]);
+                                    //holder.chat_room_img.setImageURI(Uri.parse(String.valueOf(dataSnapshot.child("userimg"))));
+                                    //Glide.with(context).using(new FirebaseImageLoader()).load(reference).into(holder.chat_room_img);
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });*/
+                        Log.e("checkkkkkk", uri[0]);
+                        items.add(new ChatRoom_item(b.get(i),"","", uri[0]));
                     }
                 }
                 chatRoom_adapter.notifyDataSetChanged();
