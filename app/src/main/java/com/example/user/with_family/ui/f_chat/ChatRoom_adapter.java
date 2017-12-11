@@ -74,6 +74,7 @@ public class ChatRoom_adapter extends RecyclerView.Adapter<ChatRoom_adapter.View
                     String uri  = dataSnapshot.child("userimg").getValue(String.class);
                     Log.e("check",uri);
                     reference = storage.getReferenceFromUrl(uri);
+
                     reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {

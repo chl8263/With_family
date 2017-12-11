@@ -150,9 +150,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("time", item.getTime());
                 sendBroadcast(intent);
                 break;
-            case R.id.fab1:
-
-                break;
             case R.id.fab2:
                 Intent intent2 = new Intent(getApplicationContext(), VideoActivity.class);
                 intent2.putExtra("init","a");
@@ -178,11 +175,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initFab() {
         fabBGLayout=findViewById(R.id.fabBGLayout);
-        fabLayout1 = (LinearLayout) findViewById(R.id.fabLayout1);
         fabLayout2 = (LinearLayout) findViewById(R.id.fabLayout2);
         fabLayout3 = (LinearLayout) findViewById(R.id.fabLayout3);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         fab3 = (FloatingActionButton) findViewById(R.id.fab3);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -204,14 +199,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private void showFABMenu() {
         isFABopen = true;
         fabBGLayout.setVisibility(View.VISIBLE);
-        fabLayout1.setVisibility(View.VISIBLE);
         fabLayout2.setVisibility(View.VISIBLE);
         fabLayout3.setVisibility(View.VISIBLE);
 
         fab.animate().rotationBy(135);
-        fabLayout1.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
-        fabLayout2.animate().translationY(-getResources().getDimension(R.dimen.standard_100));
-        fabLayout3.animate().translationY(-getResources().getDimension(R.dimen.standard_145));
+        fabLayout2.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
+        fabLayout3.animate().translationY(-getResources().getDimension(R.dimen.standard_100));
 
     }
 

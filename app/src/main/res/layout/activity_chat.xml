@@ -58,34 +58,7 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/fabLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/standard_23"
-        android:layout_marginRight="@dimen/standard_23"
-        android:clipToPadding="false"
-        android:gravity="center_vertical"
-        android:padding="@dimen/standard_6"
-        android:visibility="gone"
-        app:layout_behavior="com.ajaysinghdewari.floatingactionbuttonmenu.activities.utils.MoveUpwardBehavior">
 
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            app:fabSize="mini" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="딴거" />
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/fabLayout2"
@@ -113,6 +86,7 @@
             />
 
         <TextView
+            android:layout_marginLeft="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="영상채팅" />
@@ -144,6 +118,7 @@
             />
 
         <TextView
+            android:layout_marginLeft="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="음성 채팅" />
