@@ -111,6 +111,8 @@ public class VideoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (flag == 0) {
                     finish();
+                    MainSendUdp mainSendUdp = new MainSendUdp("t/" + Contact.MyName + "/", ip, Integer.parseInt(main_recv_port));
+                    mainSendUdp.start();
                 } else if (flag == 1) {
                     try {
                         playrtc.connectChannel(Recv__Channel, new JSONObject());

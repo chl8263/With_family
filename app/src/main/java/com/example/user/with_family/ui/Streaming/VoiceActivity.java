@@ -166,7 +166,7 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
                 if (flag == 0) {
                     //사운드 소켓을 모두 종료하고 엑티비티를 닫는다.
                     sound_send.interrupt();
-                    MainSendUdp mainSendUdp = new MainSendUdp("/" + Contact.MyName + "/", ip, Integer.parseInt(main_recv_port));
+                    MainSendUdp mainSendUdp = new MainSendUdp("r/" + Contact.MyName + "/", ip, Integer.parseInt(main_recv_port));
                     mainSendUdp.start();
                     finish();
                 } else if (flag == 1) {
