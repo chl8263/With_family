@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.user.with_family.ui.Streaming.VideoActivity;
 import com.example.user.with_family.ui.Streaming.VoiceActivity;
 import com.example.user.with_family.util.Contact;
 
@@ -59,7 +60,7 @@ public class MainServiceRecvUDP extends Service {
     private class MOVE_RECV extends Thread {
         private DatagramPacket packet = null;
         private DatagramSocket socket = null;
-        byte[] data = new byte[21];
+        byte[] data = new byte[50];
 
         public MOVE_RECV() {
 
@@ -78,15 +79,26 @@ public class MainServiceRecvUDP extends Service {
                     String msg = new String(packet.getData());
                     Log.e("wwwwwwwwwwwwwww", msg);
                     String splite[] = msg.split("/");
-                    if (splite[0].equals("c")) {
+                    if (splite[0].equals("c")) {    //voice 연결
                         Intent intent = new Intent(getApplicationContext(), VoiceActivity.class);
                         intent.putExtra("other", "RECV/" + splite[1] + "/");
                         startActivity(intent);
 
-                    }else if(splite[0].equals("m")){
-
-                    }else if(splite[0].equals("s")){
+                    }else if(splite[0].equals("s")){      //voice 연결 완료
                         Intent intent = new Intent(Contact.voice_success);
+                        sendBroadcast(intent);
+                    }else if(splite[0].equals("v")){       //영상통화 연결
+                        Intent intent = new Intent(getApplicationContext(), VideoActivity.class);
+                        intent.putExtra("other", "RECV/" + splite[1] + "/"+splite[2]);
+                        startActivity(intent);
+                    }else if(splite[0].equals("x")){        //영상통화 연결완료
+                        Intent intent = new Intent(Contact.video_success);
+                        sendBroadcast(intent);
+                    }else if(splite[0].equals("r")){    //음성통화 종료신호
+                        Intent intent = new Intent(Contact.video_success);
+                        sendBroadcast(intent);
+                    }else if(splite[0].equals("t")){    //영상통화 종료신호
+                        Intent intent = new Intent(Contact.video_success);
                         sendBroadcast(intent);
                     }
                     socket.close();

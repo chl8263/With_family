@@ -29,7 +29,7 @@ public class MainSendUdp extends Thread {
         DatagramPacket packet = null;
         InetAddress ServerAddress = null;
 
-        byte protocalBytes[] = new byte[21];
+        byte protocalBytes[] = new byte[50];
         protocalBytes = msg.getBytes();
 
         try {

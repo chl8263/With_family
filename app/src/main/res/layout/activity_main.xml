@@ -16,14 +16,15 @@
             android:backgroundTint="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="6"
             android:background="@color/color_White"
             android:orientation="horizontal">
 
             <TextView
-                android:gravity="center"
+                android:layout_marginLeft="16dp"
+                android:gravity="left|center"
                 android:textColor="@color/color_Black"
-                android:textSize="24sp"
+                android:textSize="14sp"
                 android:text="방 이름"
                 android:id="@+id/main_room_name"
                 android:layout_weight="1"
@@ -31,9 +32,20 @@
                 android:layout_width="match_parent"
                 />
             <TextView
+                android:id="@+id/recent_dday"
                 android:gravity="center"
                 android:textColor="@color/color_Black"
-                android:textSize="24sp"
+                android:textSize="20sp"
+                android:text="asd"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                />
+            <TextView
+                android:layout_marginRight="16dp"
+                android:gravity="center|right"
+                android:textColor="@color/color_Black"
+                android:textSize="16sp"
                 android:text="d-day"
                 android:id="@+id/open_draw"
                 android:layout_weight="1"
@@ -60,7 +72,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/drawlayout_recyclerview"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:background="@color/color_White"

@@ -43,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public SharedPreferences sharedPreferences;
     SharedPreferences.Editor sharededitor;
 
+    private TextView recent_dday;
     public String login_user;
     public String user_room_name;
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
@@ -96,8 +98,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //initStatusbar();
 
         initChatRoom();
-        init();
+
         setDrawerLayout();
+        init();
         initView();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
@@ -155,7 +158,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void init() {
-
+        recent_dday = (TextView)findViewById(R.id.recent_dday);
+        if(drawItems.size()==0){
+            recent_dday.setText("D-day 없음");
+        }
         onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -173,9 +179,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case R.id.navigation_calendar:
                         firstSelectNavView("calendar");
                         return true;
-                    case R.id.navigation_control:
+                    /*case R.id.navigation_control:
                         firstSelectNavView("control");
-                        return true;
+                        return true;*/
                 }
                 return false;
             }
@@ -303,6 +309,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         calDay();
+        Collections.reverse(drawItems);
+        String dday  = drawItems.get(0).getContent()+" D"+ drawItems.get(0).getDday();
+        recent_dday.setText(dday);
         drawAdapter.notifyDataSetChanged();
     }
 

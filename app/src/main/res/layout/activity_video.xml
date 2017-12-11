@@ -1,6 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</android.support.constraint.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/video_view_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
+
+        <!-- TODO: PlayRTCVideView XML View need update SDK -->
+        <!--<com.sktelecom.playrtc.util.ui.PlayRTCVideoView-->
+        <!--android:id="@+id/remote_video_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+        <!--<com.sktelecom.playrtc.util.ui.PlayRTCVideoView-->
+        <!--android:id="@+id/local_video_view"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_margin="30dp" />-->
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/darkBackground"
+        android:background="#383838"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        />
+
+
+    <ImageView
+        android:layout_above="@id/darkBackground"
+        android:id="@+id/video_otherimg"
+        android:layout_marginTop="170dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
+    <TextView
+        android:layout_above="@id/darkBackground"
+        android:text="asdsdasdsadsadsd"
+        android:textColor="@color/color_White"
+        android:textSize="16sp"
+        android:id="@+id/video_otherName"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
+    <TextView
+        android:layout_above="@id/darkBackground"
+        android:text="영상통화 왔습니다..."
+        android:textColor="@color/color_White"
+        android:textSize="20sp"
+        android:id="@+id/video_status"
+        android:layout_marginTop="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
+    <ImageView
+        android:layout_marginBottom="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        app:srcCompat="@drawable/voice_red"
+        android:id="@+id/v_call_status"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+</RelativeLayout>

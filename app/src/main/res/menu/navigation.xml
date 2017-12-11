@@ -16,8 +16,8 @@
         android:id="@+id/navigation_calendar"
         android:icon="@drawable/calendar"
         android:title="@string/navigation_calendar" />
-    <item
+  <!--  <item
         android:id="@+id/navigation_control"
         android:icon="@drawable/control"
-        android:title="@string/navigation_control" />
+        android:title="@string/navigation_control" />-->
 </menu>

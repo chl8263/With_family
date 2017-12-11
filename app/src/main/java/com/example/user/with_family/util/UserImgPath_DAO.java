@@ -5,17 +5,17 @@ package com.example.user.with_family.util;
  */
 
 public class UserImgPath_DAO {
-    private String path;
-
-    public UserImgPath_DAO(String path) {
-        this.path = path;
+    private String userimg;
+    public UserImgPath_DAO(){}
+    public UserImgPath_DAO(String userimg) {
+        this.userimg = userimg;
     }
 
-    public String getPath() {
-        return path;
+    public String getUserimg() {
+        return userimg;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setUserimg(String userimg) {
+        this.userimg = userimg;
     }
 }

@@ -55,7 +55,7 @@ public class Sound_recv extends Thread {
             track.play();
             //track.release();
             track = null;
-        } catch (SocketException e) {
+        }catch (SocketException e) {
             e.printStackTrace();
             Log.e("받음", "ㄴㄴ");
         } catch (IOException e) {

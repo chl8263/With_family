@@ -57,6 +57,7 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Contact.voice_success);
+        intentFilter.addAction(Contact.voice_exit);
         registerReceiver(receiver, intentFilter);
 
         player = MediaPlayer.create(getApplicationContext(), R.raw.voice);
@@ -67,10 +68,10 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onStop() {
         super.onStop();
-        if (player != null) {
+       /* if (player != null) {
             player.stop();
             player.release();
-        }
+        }*/
     }
 
 
@@ -82,10 +83,10 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
             unregisterReceiver(receiver);
             receiver = null;
         }
-        if (player != null) {
+       /* if (player != null) {
             player.stop();
             player.release();
-        }
+        }*/
 
     }
 
@@ -164,6 +165,10 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
             case R.id.callstatus:
                 if (flag == 0) {
                     //사운드 소켓을 모두 종료하고 엑티비티를 닫는다.
+                    sound_send.interrupt();
+                    MainSendUdp mainSendUdp = new MainSendUdp("/" + Contact.MyName + "/", ip, Integer.parseInt(main_recv_port));
+                    mainSendUdp.start();
+                    finish();
                 } else if (flag == 1) {
                     MainSendUdp mainSendUdp = new MainSendUdp("s/" + Contact.MyName + "/", ip, Integer.parseInt(main_recv_port));
                     mainSendUdp.start();
@@ -200,6 +205,8 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
                 sound_recv.start();
                 sound_send = new Sound_send(ip, Integer.parseInt(sound_send_port));
                 sound_send.start();
+            }else if (intent.getAction().equals(Contact.voice_exit)) {
+                finish();
             }
         }
     };

@@ -2,6 +2,7 @@ package com.example.user.with_family.ui.f_chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,12 +17,12 @@ import com.example.user.with_family.R;
 import com.example.user.with_family.ui.ChatActivity.ChatActivity;
 import com.example.user.with_family.ui.ChatActivity.Chat_item;
 import com.example.user.with_family.util.Contact;
-import com.example.user.with_family.util.UserImgPath_DAO;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -51,18 +52,20 @@ public class ChatRoom_adapter extends RecyclerView.Adapter<ChatRoom_adapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.chatroom_name.setText(items.get(position).getName());
         holder.chatroom_content.setText(items.get(position).getContent());
         holder.chatroom_time.setText(items.get(position).getTime());
-        String path ;
+
         roomimg.child(items.get(position).getName()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    UserImgPath_DAO userImgPath_dao = snapshot.getValue(UserImgPath_DAO.class);
-                    path = userImgPath_dao.getPath();
+                /*String a = (String) dataSnapshot.child("userimg").getValue();*/
+                Log.e("aaaaa",dataSnapshot.child("userimg").toString());
+                if(dataSnapshot.child("userimg").getValue()!=null){
+                    Picasso.with(context).load(Uri.parse(String.valueOf(dataSnapshot.child("userimg")))).into(holder.chat_room_img);
                 }
+
             }
 
             @Override
@@ -70,7 +73,7 @@ public class ChatRoom_adapter extends RecyclerView.Adapter<ChatRoom_adapter.View
 
             }
         });
-        holder.chat_room_img.setImageResource(items.g);
+        //holder.chat_room_img.setImageResource(items.g);
         String roomName = Contact.MyName+","+items.get(position).getName();
         String roomName2 = items.get(position).getName()+","+Contact.MyName;
         Log.e("asdadsadsdas",items.get(position).getName()+","+Contact.MyName);

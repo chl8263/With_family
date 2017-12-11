@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.user.with_family.R;
+import com.example.user.with_family.ui.Streaming.VideoActivity;
 import com.example.user.with_family.ui.Streaming.VoiceActivity;
 import com.example.user.with_family.util.Contact;
 import com.google.firebase.database.ChildEventListener;
@@ -153,6 +154,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.fab2:
+                Intent intent2 = new Intent(getApplicationContext(), VideoActivity.class);
+
+                intent2.putExtra("other","SEND/"+getRoomOther+"/");
+                startActivity(intent2);
                 break;
             case R.id.fab3:
                 Intent intent1 = new Intent(getApplicationContext(), VoiceActivity.class);

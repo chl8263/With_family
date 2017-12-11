@@ -1,10 +1,12 @@
 package com.example.user.with_family.ui.drawlayout;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by choi on 2017-11-25.
  */
 
-public class DrawItem {
+public class DrawItem implements Comparable<DrawItem>{
     private String content;
     private String dday;
     public DrawItem(String content , String dday) {
@@ -26,5 +28,15 @@ public class DrawItem {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public int compareTo(@NonNull DrawItem drawItem) {
+
+        if(Integer.parseInt(this.dday) < Integer.parseInt(drawItem.dday)){
+            return -1;
+        }else{
+            return 1;
+        }
     }
 }
