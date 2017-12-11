@@ -23,6 +23,7 @@ public class AddFriendActivity extends Activity {
 
 
 
+
         id_editText = (EditText)findViewById(R.id.add_friend_id_txt);
         ok_btn = (Button)findViewById(R.id.add_friend_id_btn);
         ok_btn.setOnClickListener(new View.OnClickListener() {

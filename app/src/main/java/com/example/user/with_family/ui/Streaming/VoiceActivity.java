@@ -68,10 +68,7 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onStop() {
         super.onStop();
-       /* if (player != null) {
-            player.stop();
-            player.release();
-        }*/
+        player.stop();
     }
 
 
@@ -165,7 +162,10 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
             case R.id.callstatus:
                 if (flag == 0) {
                     //사운드 소켓을 모두 종료하고 엑티비티를 닫는다.
-                    sound_send.interrupt();
+                    if(sound_send!=null) {
+                        sound_send.interrupt();
+                        sound_send =null;
+                    }
                     MainSendUdp mainSendUdp = new MainSendUdp("r/" + Contact.MyName + "/", ip, Integer.parseInt(main_recv_port));
                     mainSendUdp.start();
                     finish();
