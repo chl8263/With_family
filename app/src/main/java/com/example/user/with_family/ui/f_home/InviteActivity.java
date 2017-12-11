@@ -1,15 +1,16 @@
 package com.example.user.with_family.ui.f_home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.user.with_family.R;
 
-public class InviteActivity extends AppCompatActivity {
+public class InviteActivity extends Activity {
 
     private TextView title_text;
     private TextView room_text;
@@ -29,6 +30,7 @@ public class InviteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_invite);
 
         Intent resultintent = getIntent();

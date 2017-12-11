@@ -17,7 +17,7 @@
             android:textSize="22sp"
             android:textColor="#ffffff"
             android:gravity="center"
-            android:background="#a00ff7"
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="53dp" />
     </LinearLayout>
@@ -83,22 +83,29 @@
             android:id="@+id/invite_room_id_btn"
             android:text="확 인"
             android:textSize="15sp"
-            android:textColor="#a00ff7"
+            android:textColor="#ffffff"
             android:padding="16dp"
             android:gravity="center"
-            android:background="#00000000"
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:layout_weight="1" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="53dp"
+            android:background="#f0f0d0"
+            />
+
 
         <Button
             android:id="@+id/invite_room_id_cancle"
             android:text="취 소"
             android:textSize="15sp"
-            android:textColor="#a00ff7"
+            android:textColor="#ffffff"
             android:padding="16dp"
             android:gravity="center"
-            android:background="#00000000"
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:layout_weight="1" />

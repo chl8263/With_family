@@ -152,9 +152,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (view != null) {
                 view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                getWindow().setStatusBarColor(Color.parseColor("#ffc0cb"));
+                getWindow().setStatusBarColor(Color.parseColor("#@color/colorPrimary"));
             }
-        } else getWindow().setStatusBarColor(Color.parseColor("#000"));
+        } else getWindow().setStatusBarColor(Color.parseColor("@color/colorPrimary"));
     }
 
     public void init() {

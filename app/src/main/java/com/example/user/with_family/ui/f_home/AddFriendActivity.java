@@ -1,15 +1,16 @@
 package com.example.user.with_family.ui.f_home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.user.with_family.R;
 
-public class AddFriendActivity extends AppCompatActivity {
+public class AddFriendActivity extends Activity {
 
     private EditText id_editText;
     private Button ok_btn;
@@ -17,7 +18,10 @@ public class AddFriendActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add_friend);
+
+
 
         id_editText = (EditText)findViewById(R.id.add_friend_id_txt);
         ok_btn = (Button)findViewById(R.id.add_friend_id_btn);

@@ -43,21 +43,28 @@
             android:theme="@style/AppTheme2" />
         <activity
             android:name=".RegisterActivity"
-            android:theme="@android:style/Theme.Dialog" />
+            android:theme="@style/AppTheme3"
+            />
+        <!--android:theme="@android:style/Theme.Dialog"-->
+
+
         <activity
             android:name=".ui.f_calendar.Calendar_dialog"
             android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity android:name=".ui.f_home.UserInfoActivity" />
-        <activity android:name=".ui.f_home.UserInfoActivity2" />
+        <activity android:name=".ui.f_home.UserInfoActivity"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".ui.f_home.UserInfoActivity2"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.f_home.AddFriendActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:theme="@style/AppTheme3"
+            />
         <activity
             android:name=".ui.f_home.CreateRoomActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:theme="@style/AppTheme3" />
         <activity
             android:name=".ui.f_home.InviteActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:theme="@style/AppTheme3" />
         <activity android:name=".ui.ChatActivity.ChatActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             />
@@ -67,7 +74,11 @@
         <activity android:name=".ui.Streaming.VideoActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             />
-        <service android:name=".netWork.MainServiceRecvUDP"/>
+        <service android:name=".netWork.MainServiceRecvUDP"
+            android:theme="@style/AppTheme3"  />
+        <activity android:name=".ui.ChatActivity.ChatActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            />
     </application>
 
 </manifest>

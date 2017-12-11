@@ -8,7 +8,8 @@
     android:layout_marginBottom="7dp"
     android:layout_marginTop="7dp"
     android:layout_marginRight="7dp"
-    android:layout_marginLeft="7dp">
+    android:layout_marginLeft="7dp"
+    android:background="#FFFFFF">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -44,7 +45,7 @@
             />
             <TextView
                 android:paddingTop="10dp"
-                android:textColor="#FF0000"
+                android:textColor="@color/colorPrimary"
                 android:id="@+id/user_stat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

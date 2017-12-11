@@ -123,10 +123,10 @@ public class HomeFragment extends Fragment {
                 myintent.putExtra("id", dao.getId());
                 myintent.putExtra("userurl", dao.getUserimg());
                 myintent.putExtra("username", dao.getName());
-                //myintent.putExtra("userstats", dao.getSarrayList.get(position).getStats());
+                myintent.putExtra("userstats", dao.getNick());
                 myintent.putExtra("userbackurl", R.drawable.family);
                 myintent.putExtra("userid", dao.getId());
-                startActivityForResult(myintent, request_code);
+                startActivity(myintent);
             }
         });
 
@@ -334,7 +334,7 @@ public class HomeFragment extends Fragment {
                     System.out.println("all 리스트 : " + userDAOList.get(j).getId().toString());
 
                     if(room_userDAOList.get(i).toString().equals(userDAOList.get(j).getId().toString())){
-                        main_joinstateAdapter.addItem(new Contacts(userDAOList.get(j).getUserimg(), R.drawable.family, userDAOList.get(j).getName(), userDAOList.get(j).getNick(), userDAOList.get(j).getId())); // 이미지 url, 이름 name
+                        main_joinstateAdapter.addItem(new Contacts(userDAOList.get(j).getUserimg(), R.drawable.background, userDAOList.get(j).getName(), userDAOList.get(j).getNick(), userDAOList.get(j).getId())); // 이미지 url, 이름 name
                         main_joinstateAdapter.notifyDataSetChanged();
                     }
                 }
