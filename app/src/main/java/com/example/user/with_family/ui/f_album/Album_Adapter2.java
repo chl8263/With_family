@@ -119,7 +119,7 @@ public class Album_Adapter2 extends RecyclerView.Adapter<Album_Adapter2.ViewHold
 
 
     @Override   // 뷰홀더의 뷰에 position에 해당되는 데이터를 넣음 = 데이터 처리하는곳
-    public void onBindViewHolder(Album_Adapter2.ViewHolder viewHolder, int position){
+    public void onBindViewHolder(final Album_Adapter2.ViewHolder viewHolder, final int position){
 
         // 특정 날짜
         viewHolder.textView.setText(save_date.get(position).getDate());

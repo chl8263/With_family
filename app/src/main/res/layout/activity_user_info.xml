@@ -9,7 +9,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp">
+        android:layout_height="400dp">
         <ImageView
             android:id="@+id/user_background_imgview"
             android:layout_width="match_parent"

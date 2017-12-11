@@ -149,12 +149,12 @@ public class LoginActivity extends AppCompatActivity {
                     else if (userDAOList.get(i).getId().equals(id_edittext.getText().toString()) &&
                             !userDAOList.get(i).getPw().equals(pw_edittext.getText().toString())) {
 
-                        Toast.makeText(getApplicationContext(), "ID와 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "ID와 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
                         break;
                     }
                     // ID가 존재하지않을때 -> 회원가입이 필요할때
                     else {
-                        Toast.makeText(getApplicationContext(), "회원가입이 필요하신 ID입니다", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "회원가입이 필요하신 ID입니다", Toast.LENGTH_SHORT).show();
                     }
 
                 }
