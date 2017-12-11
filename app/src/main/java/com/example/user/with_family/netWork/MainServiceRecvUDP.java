@@ -95,10 +95,10 @@ public class MainServiceRecvUDP extends Service {
                         Intent intent = new Intent(Contact.video_success);
                         sendBroadcast(intent);
                     }else if(splite[0].equals("r")){    //음성통화 종료신호
-                        Intent intent = new Intent(Contact.video_success);
+                        Intent intent = new Intent(Contact.voice_exit);
                         sendBroadcast(intent);
                     }else if(splite[0].equals("t")){    //영상통화 종료신호
-                        Intent intent = new Intent(Contact.video_success);
+                        Intent intent = new Intent(Contact.video_exit);
                         sendBroadcast(intent);
                     }
                     socket.close();
