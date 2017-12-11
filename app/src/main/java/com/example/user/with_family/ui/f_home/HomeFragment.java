@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.user.with_family.R;
-import com.example.user.with_family.netWork.MainServiceRecvUDP;
 import com.example.user.with_family.util.Contact;
 import com.example.user.with_family.util.Contacts;
 import com.example.user.with_family.util.UserDAO;
@@ -124,7 +123,7 @@ public class HomeFragment extends Fragment {
                 myintent.putExtra("userurl", dao.getUserimg());
                 myintent.putExtra("username", dao.getName());
                 myintent.putExtra("userstats", dao.getNick());
-                myintent.putExtra("userbackurl", R.drawable.family);
+                myintent.putExtra("userbackurl", R.drawable.background);
                 myintent.putExtra("userid", dao.getId());
                 startActivity(myintent);
             }
@@ -235,13 +234,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 Contact.MyMainRoom = dao.getRoom_name();
-                //Contact.MyName = dao.getName();
-                Contact.MyMainsendPort = dao.getMainsendport();
-                Contact.MyMainrecvPort = dao.getMainrecvport();
-                Contact.MySoundsendPort = dao.getSoundsendport();
-                Contact.MySoundrecvPort = dao.getSoundrecvport();
-                Intent intent = new Intent(getContext(), MainServiceRecvUDP.class);
-                getActivity().startService(intent);
+                Contact.MyName = dao.getName();
 
                 // 맨위 속한 그룹이 어딘지 표시해주는 메인액티비티에 있는 텍스트뷰
                 main_room_name = (TextView)getActivity().findViewById(R.id.main_room_name);

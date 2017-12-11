@@ -25,33 +25,34 @@
    <LinearLayout
        android:orientation="vertical"
        android:layout_width="match_parent"
-       android:layout_height="330dp"
+       android:layout_height="380dp"
        android:id="@+id/register_form">
 
        <LinearLayout
-           android:layout_marginTop="30dp"
+           android:layout_marginTop="20dp"
            android:id="@+id/register_ID_layout"
-           android:orientation="horizontal"
+           android:orientation="vertical"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_gravity="center"
-           android:gravity="center">
+           >
 
            <TextView
                android:layout_width="60dp"
                android:layout_height="wrap_content"
-               android:layout_gravity="center"
-               android:text="I   D  :  "
-               android:textColor="#000000"
-               android:textSize="18dp"
+               android:text=" I   D  :  "
+               android:textColor="#ffffff"
+               android:textSize="15dp"
+               android:paddingBottom="5dp"
                />
            <EditText
                android:id="@+id/register_ID_edit"
-               android:layout_width="160dp"
-               android:layout_height="wrap_content"
+               android:layout_width="150dp"
+               android:layout_height="40dp"
                android:layout_gravity="center_horizontal"
-               android:hint="IDddddd"
-               android:textSize="18dp"/>
+               android:hint="ID"
+               android:textSize="10dp"
+               android:textColor="#000000"/>
               <!-- android:clickable="false"
                android:focusable="false"-->
 
@@ -60,26 +61,29 @@
        <LinearLayout
            android:layout_marginTop="5dp"
            android:id="@+id/register_PW_layout"
-           android:orientation="horizontal"
+           android:orientation="vertical"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_gravity="center"
-           android:gravity="center">
+           >
 
            <TextView
                android:layout_width="60dp"
                android:layout_height="wrap_content"
-               android:layout_gravity="center"
-               android:text="P W  :  "
-               android:textColor="#000000"
-               android:textSize="18dp"
+               android:text=" P   W  :  "
+               android:textColor="#ffffff"
+               android:textSize="15dp"
+               android:paddingBottom="5dp"
                />
            <EditText
                android:id="@+id/register_PW_edit"
-               android:layout_width="160dp"
-               android:layout_height="wrap_content"
+               android:layout_width="150dp"
+               android:layout_height="40dp"
                android:layout_gravity="center_horizontal"
-               android:textSize="18dp"
+               android:textSize="10dp"
+               android:textColor="#000000"
+               android:hint="******"
+               android:password="true"
                />
 
        </LinearLayout>
@@ -87,26 +91,27 @@
        <LinearLayout
            android:layout_marginTop="5dp"
            android:id="@+id/register_name_layout"
-           android:orientation="horizontal"
+           android:orientation="vertical"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_gravity="center"
-           android:gravity="center">
+           >
 
            <TextView
                android:layout_width="60dp"
                android:layout_height="wrap_content"
-               android:layout_gravity="center"
                android:text="이 름  :  "
-               android:textColor="#000000"
-               android:textSize="18dp"
+               android:textColor="#ffffff"
+               android:textSize="15dp"
+
                />
            <EditText
                android:id="@+id/register_name_edit"
-               android:layout_width="160dp"
-               android:layout_height="wrap_content"
+               android:layout_width="150dp"
+               android:layout_height="40dp"
                android:layout_gravity="center_horizontal"
-               android:textSize="18dp"
+               android:textSize="10dp"
+               android:hint="홍길동"
                />
 
        </LinearLayout>
@@ -114,26 +119,27 @@
        <LinearLayout
            android:layout_marginTop="5dp"
            android:id="@+id/register_adr_layout"
-           android:orientation="horizontal"
+           android:orientation="vertical"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_gravity="center"
-           android:gravity="center">
+           >
 
            <TextView
                android:layout_width="60dp"
                android:layout_height="wrap_content"
-               android:layout_gravity="center"
                android:text="생 일  :  "
-               android:textColor="#000000"
-               android:textSize="18dp"
+               android:textColor="#ffffff"
+               android:textSize="15dp"
+
                />
            <EditText
                android:id="@+id/register_bir_edit"
-               android:layout_width="160dp"
-               android:layout_height="wrap_content"
+               android:layout_width="150dp"
+               android:layout_height="40dp"
                android:layout_gravity="center_horizontal"
-               android:textSize="18dp"
+               android:textSize="10dp"
+               android:hint="1992-08-03"
                />
 
        </LinearLayout>
@@ -141,26 +147,26 @@
        <LinearLayout
            android:layout_marginTop="5dp"
            android:id="@+id/register_nickname_layout"
-           android:orientation="horizontal"
+           android:orientation="vertical"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_gravity="center"
-           android:gravity="center">
+           >
 
            <TextView
                android:layout_width="60dp"
                android:layout_height="wrap_content"
-               android:layout_gravity="center"
                android:text="별 칭  :  "
-               android:textColor="#000000"
-               android:textSize="18dp"
+               android:textColor="#ffffff"
+               android:textSize="15dp"
                />
            <EditText
                android:id="@+id/register_nickname_edit"
-               android:layout_width="160dp"
-               android:layout_height="wrap_content"
+               android:layout_width="150dp"
+               android:layout_height="40dp"
                android:layout_gravity="center_horizontal"
-               android:textSize="18dp"
+               android:textSize="10dp"
+               android:hint="홍가"
                />
 
        </LinearLayout>

@@ -78,7 +78,7 @@ public class Album_Adapter extends RecyclerView.Adapter<Album_Adapter.ViewHolder
 
 
     @Override   // 뷰홀더의 뷰에 position에 해당되는 데이터를 넣음 = 데이터 처리하는곳
-    public void onBindViewHolder(final Album_Adapter.ViewHolder viewHolder, int position){
+    public void onBindViewHolder(final Album_Adapter.ViewHolder viewHolder, final int position){
         /*viewHolder.textView.setText(arrayList.get(position).getDate().toString());
         System.out.println("마지막 날짜 : " + arrayList.get(position).getDate());*/
 

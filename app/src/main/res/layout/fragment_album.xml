@@ -35,9 +35,9 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:src="@drawable/ic_collections_black_24dp"
-            fab:fab_colorNormal="@color/fabPrimary"
-            fab:fab_colorPressed="@color/fabPressed"
-            fab:fab_colorRipple="@color/fabRipple"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/colorPrimaryPressed"
+            fab:fab_colorRipple="@color/colorPrimaryRipple"
             />
     </FrameLayout>
 </FrameLayout>
